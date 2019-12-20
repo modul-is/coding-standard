@@ -1,0 +1,27 @@
+{
+	"name": "modul-is/coding-standard",
+	"description": "Coding standard for our superior apps",
+	"keywords": ["php", "nette", "coding-standard"],
+	"homepage": "https://github.com/modul-is/coding-standard",
+	"license": "MIT",
+	"support": {
+		"issues": "https://github.com/modul-is/coding-standard/issues"
+	},
+
+	"require": {
+		"php": ">=7.0.0",
+		"symplify/easy-coding-standard": "6.1.0",
+		"symplify/coding-standard": "6.1.0",
+		"slevomat/coding-standard": "^5.0.4"
+	},
+
+	"require-dev": {
+		"tracy/tracy": "^2.5"
+	},
+
+	"autoload": {
+		"psr-4": {
+			"Nette\\CodingStandard\\": "src"
+		}
+	}
+}

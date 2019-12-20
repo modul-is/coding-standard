@@ -1,0 +1,108 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+print PHP_EOL;
+
+if($argc == 3)
+{
+	$mysqli = new mysqli("$argv[1]", "$argv[2]");
+}
+elseif($argc == 4)
+{
+	$mysqli = new mysqli("$argv[1]", "$argv[2]", "$argv[3]");
+}
+else
+{
+	print "[ERROR] Wrong number of parameters given." . PHP_EOL;
+	die();
+}
+
+if(!$mysqli->connect_error)
+{
+	print "Connection successful. Host info: " . $mysqli->host_info . PHP_EOL;
+}
+else
+{
+	print "[ERROR] Could not connect. " . $mysqli->connect_error . PHP_EOL;
+	die();
+}
+
+print PHP_EOL;
+
+$problemCount = checkStrictMode($mysqli);
+
+print PHP_EOL;
+
+$problemCount += checkEncoding($mysqli);
+
+print PHP_EOL;
+
+$mysqli->close();
+
+if($problemCount == 0)
+{
+	print "[OK] All tests finished. No problems found." . PHP_EOL;
+}
+else
+{
+	print "[WARNING] All tests finished. " . $problemCount . " problem(s) found." . PHP_EOL;
+}
+
+
+function checkStrictMode(\mysqli $mysqli)
+{
+    $sqlMode = $mysqli->query("SELECT @@GLOBAL.sql_mode;")->fetch_row()[0];
+
+    if(preg_match("/STRICT_TRANS_TABLES/", $sqlMode))
+    {
+	    print "Strict mode set." . PHP_EOL;
+
+	    return 0;
+    }
+    else
+    {
+	    print "[WARNING] Strict mode not set!" . PHP_EOL;
+	    print "Please add the following code into my.ini and then restart MySQL." . PHP_EOL;
+	    print "[mysqld]" . PHP_EOL;
+	    print "sql_mode=\"STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\"" . PHP_EOL;
+
+	    return 1;
+    }
+}
+
+
+function checkEncoding(\mysqli $mysqli)
+{
+    $databaseArray = $mysqli->query("SHOW DATABASES")->fetch_all();
+    $charsetArray = $mysqli->query("SELECT default_character_set_name FROM information_schema.SCHEMATA")->fetch_all();
+    $collationArray = $mysqli->query("SELECT default_collation_name FROM information_schema.SCHEMATA")->fetch_all();
+
+	$skippedDatabaseArray = ["information_schema", "mysql", "performance_schema", "phpmyadmin"];
+    $wrongEncodingDatabaseArray = [];
+    $i = 0;
+
+    foreach($databaseArray as $database)
+    {
+        if(!in_array($database[0], $skippedDatabaseArray)  && ($charsetArray[$i][0] != "utf8mb4" || $collationArray[$i][0] != "utf8mb4_czech_ci"))
+        {
+            $wrongEncodingDatabaseArray[] = $database[0];
+        }
+
+		$i++;
+    }
+
+    if(empty($wrongEncodingDatabaseArray))
+    {
+        print "Correct encoding set in all databases." . PHP_EOL;
+
+		return 0;
+    }
+    else
+    {
+		print "[WARNING] Wrong encoding set in one or more databases!" . PHP_EOL;
+		print "Please set the encoding to \"utf8mb4_czech_ci\" in these databases:" . PHP_EOL;
+		print implode(", ", $wrongEncodingDatabaseArray) . PHP_EOL;
+
+		return 1;
+    }
+}
