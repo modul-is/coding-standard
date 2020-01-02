@@ -12,11 +12,12 @@ use Symplify\PackageBuilder\Console\Input\InputDetector;
 // performance boost
 gc_disable();
 
-$dir = str_replace('\vendor\modul-is\coding-standard', '', __DIR__);
+$packagePath = join(DIRECTORY_SEPARATOR, ['vendor', 'modul-is', 'coding-standard']);
+$dir = str_replace($packagePath, '', __DIR__);
 
 # 1. autoload
-require_once $dir . '/vendor/autoload.php';
-require_once $dir . '/vendor/squizlabs/php_codesniffer/autoload.php';
+require_once join(DIRECTORY_SEPARATOR, [$dir, 'vendor', 'autoload.php']);
+require_once join(DIRECTORY_SEPARATOR, [$dir, 'vendor', 'squizlabs', 'php_codesniffer', 'autoload.php']);
 
 // performance boost
 $xdebug = new XdebugHandler('ecs', '--ansi');
