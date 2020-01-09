@@ -1,0 +1,29 @@
+language: php
+
+php:
+    - 7.1
+    - 7.2
+
+matrix:
+    include:
+        - php: 7.1
+          env: COMPOSER_PROJECT=true
+
+install:
+    - composer install
+    - if [[ $COMPOSER_PROJECT != "" ]]; then composer create-project nette/coding-standard:dev-master temp/nette-coding-standard; fi
+
+script:
+    - ./ecs check examples --config coding-standard-php56.yml
+    - ./ecs check examples --config coding-standard-php70.yml
+    - ./ecs check examples --config coding-standard-php71.yml
+    - if [[ $COMPOSER_PROJECT != "" ]]; then temp/nette-coding-standard/ecs check src examples --config temp/nette-coding-standard/coding-standard-php71.yml; fi
+
+notifications:
+    email: false
+
+sudo: false
+
+cache:
+    directories:
+        - $HOME/.composer/cache

@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Nette\CodingStandard\Examples;
+
+interface IValidClassFactory
+{
+	function create(): ValidClass;
+}
