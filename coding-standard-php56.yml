@@ -133,7 +133,8 @@ services:
     # Checks that there's a single space between a typehint and a parameter name and no whitespace between a nullability symbol and a typehint
     SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSpacingSniff: ~
     # Spaces should be properly placed in a function declaration.
-    Nette\CodingStandard\Fixer\FunctionNotation\FunctionDeclarationFixer: ~
+    Nette\CodingStandard\Fixer\FunctionNotation\FunctionDeclarationFixer:
+        closure_function_spacing: 'none'
     # In function arguments there must not be arguments with default values before non-default ones.
     PhpCsFixer\Fixer\FunctionNotation\NoUnreachableDefaultArgumentValueFixer: ~
 

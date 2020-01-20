@@ -42,6 +42,12 @@ class ValidClass
 
 	public function __destruct()
 	{
+		$a = '1';
+
+		$b = function($a)
+		{
+			return (int) $a;
+		};
 	}
 
 
