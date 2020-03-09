@@ -145,7 +145,7 @@ services:
         elements: ['property', 'method']
 
     # Constants and Properties should be separated by 1 blank line
-    PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer:
+    Nette\CodingStandard\Fixer\ClassNotation\ClassAttributesSeparationFixer:
         elements: [const, property]
 
     # Last property and 1st method should be separated by 2 spaces
