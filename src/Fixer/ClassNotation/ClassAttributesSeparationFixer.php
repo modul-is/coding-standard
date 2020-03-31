@@ -350,7 +350,7 @@ class Sample
     {
         $start = $commentIndex;
         for ($i = $commentIndex - 1; $i > 0; --$i) {
-            if ($tokens[$i]->isisComment()) {
+            if ($tokens[$i]->isComment()) {
                 $start = $i;
 
                 continue;

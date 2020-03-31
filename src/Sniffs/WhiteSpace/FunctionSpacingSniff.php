@@ -201,7 +201,17 @@ class FunctionSpacingSniff implements Sniff
 			}//end while
 		}//end if
 
-		if ($foundLines !== $this->spacing) {
+		$isInterface = false;
+
+		foreach($tokens as $token)
+		{
+			if($token['type'] == 'T_INTERFACE')
+			{
+				$isInterface = true;
+			}
+		}
+
+		if ($foundLines !== $this->spacing && !$isInterface) {
 			$error = 'Expected %s blank line';
 			if ($this->spacing !== 1) {
 				$error .= 's';

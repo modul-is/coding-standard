@@ -50,7 +50,7 @@ interface IValidClassFactory
 
 		Preg::match($string, $content, $matches);
 
-		if(empty($matches[3]))
+		if(!empty($matches[1]) && !empty($matches[2]) && empty($matches[3]))
 		{
 			$newString = $matches[1] . ': ' . $matches[2] . ';';
 
