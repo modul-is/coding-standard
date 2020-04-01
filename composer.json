@@ -20,8 +20,6 @@
 	},
 
 	"autoload": {
-		"psr-4": {
-			"Nette\\CodingStandard\\": "src"
-		}
+		"classmap": ["src/"]
 	}
 }
