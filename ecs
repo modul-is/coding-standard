@@ -72,6 +72,36 @@ if ($configs !== []) {
 $easyCodingStandardKernel->boot();
 $container = $easyCodingStandardKernel->getContainer();
 
-# 3. run
+# 3. latte space fixer
+print PHP_EOL . "Latte templates converted to tabs:" . PHP_EOL;
+
+foreach(\Nette\Utils\Finder::findFiles('*.latte')->from($argv[2]) as $file)
+{
+    $path = $file->getRealPath();
+
+    $content = file_get_contents($path);
+
+    $count = 0;
+
+    if(strpos($content, '    '))
+    {
+		$content = str_replace('    ', "\t", $content);
+
+		file_put_contents($path, $content);
+
+		$count++;
+
+		print $path . PHP_EOL;
+    }
+
+    if($count == 0)
+    {
+        print "-" . PHP_EOL;
+    }
+}
+
+print PHP_EOL;
+
+# 4. run
 $application = $container->get(EasyCodingStandardConsoleApplication::class);
 exit($application->run());
