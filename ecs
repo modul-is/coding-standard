@@ -72,35 +72,45 @@ if ($configs !== []) {
 $easyCodingStandardKernel->boot();
 $container = $easyCodingStandardKernel->getContainer();
 
-# 3. latte space fixer
-print PHP_EOL . "Latte templates converted to tabs:" . PHP_EOL;
+# 3. space fixer (Latte, Twig, Neon)
+$files = '';
+$count = 0;
 
-foreach(\Nette\Utils\Finder::findFiles('*.latte')->from($argv[2]) as $file)
+foreach(\Nette\Utils\Finder::findFiles('*.latte', '*.twig', '*.neon')->from($argv[2]) as $file)
 {
     $path = $file->getRealPath();
 
     $content = file_get_contents($path);
 
-    $count = 0;
-
     if(strpos($content, '    '))
     {
-		$content = str_replace('    ', "\t", $content);
+        if(in_array('--fix', $argv, true))
+        {
+			$content = str_replace('    ', "\t", $content);
 
-		file_put_contents($path, $content);
+			file_put_contents($path, $content);
+        }
 
+		$files .= $path . PHP_EOL;
 		$count++;
-
-		print $path . PHP_EOL;
-    }
-
-    if($count == 0)
-    {
-        print "-" . PHP_EOL;
     }
 }
 
-print PHP_EOL;
+if($count != 0)
+{
+	print PHP_EOL;
+
+	if(in_array('--fix', $argv, true))
+	{
+		print "Files converted to tabs:" . PHP_EOL;
+	}
+	else
+	{
+		print "Files can be converted to tabs:" . PHP_EOL;
+	}
+
+	print $files . PHP_EOL;
+}
 
 # 4. run
 $application = $container->get(EasyCodingStandardConsoleApplication::class);

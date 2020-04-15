@@ -1,0 +1,7 @@
+coding-standard:
+	awesome: true
+	support:
+		- PHP
+		- Latte
+		- Twig
+		- Neon

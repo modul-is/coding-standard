@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Webpage</title>
+</head>
+<body>
+	<ul id="navigation">
+		{% for item in navigation %}
+			<li>
+				<a href="{{ item.href }}">
+					{{ item.caption }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+
+	<h1>Example</h1>
+	{{ variable }}
+</body>
+</html>
