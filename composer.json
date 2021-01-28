@@ -10,8 +10,8 @@
 
 	"require": {
 		"php": ">=7.2.0",
-		"symplify/easy-coding-standard": "^7",
-		"symplify/coding-standard": "^7",
+		"symplify/easy-coding-standard": "^8",
+		"symplify/coding-standard": "^8",
 		"slevomat/coding-standard": "^6"
 	},
 
