@@ -9,9 +9,9 @@
 	},
 
 	"require": {
-		"php": ">=7.2.0",
-		"symplify/easy-coding-standard": "^8",
-		"symplify/coding-standard": "^8",
+		"php": ">=7.3.0",
+		"symplify/easy-coding-standard": "^9",
+		"symplify/coding-standard": "^9",
 		"slevomat/coding-standard": "^6"
 	},
 
