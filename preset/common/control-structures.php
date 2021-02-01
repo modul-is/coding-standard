@@ -52,9 +52,6 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 	// Cast should be written in lower case.
 	$services->set(PhpCsFixer\Fixer\CastNotation\LowercaseCastFixer::class);
 
-	// Replaces `intval`, `floatval`, `doubleval`, `strval` and `boolval` function calls with according type casting operator
-	$services->set(PhpCsFixer\Fixer\CastNotation\ModernizeTypesCastingFixer::class);
-
 	// Short cast `bool` using double exclamation mark should not be used
 	$services->set(PhpCsFixer\Fixer\CastNotation\NoShortBoolCastFixer::class);
 
