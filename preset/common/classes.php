@@ -55,7 +55,4 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 
 	// In function arguments there must not be arguments with default values before non-default ones.
 	$services->set(PhpCsFixer\Fixer\FunctionNotation\NoUnreachableDefaultArgumentValueFixer::class);
-
-	// Enforces method signature to be splitted to more lines so each parameter is on its own line.
-	$services->set(SlevomatCodingStandard\Sniffs\Classes\RequireMultiLineMethodSignatureSniff::class);
 };

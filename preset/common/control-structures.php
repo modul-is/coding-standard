@@ -29,14 +29,6 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 	// Reports new with useless parentheses.
 	$services->set(SlevomatCodingStandard\Sniffs\ControlStructures\NewWithoutParenthesesSniff::class);
 
-	// Ternary operator has to be reformatted to more lines when the line length exceeds the given limit.
-	$services->set(Nette\SlevomatCodingStandard\Sniffs\ControlStructures\RequireMultiLineTernaryOperatorSniff::class)
-		->property('lineLengthLimit', 90)
-		->property('expressionsMinLength', 20);
-
-	// Enforces conditions of if, elseif, while and do-while with one or more boolean operators to be splitted to more lines so each condition part is on its own line
-	$services->set(SlevomatCodingStandard\Sniffs\ControlStructures\RequireMultiLineConditionSniff::class);
-
 	// Inside a classy element "self" should be preferred to the class name itself.
 	$services->set(PhpCsFixer\Fixer\ClassNotation\SelfAccessorFixer::class);
 
