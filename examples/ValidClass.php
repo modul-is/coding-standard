@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nette\CodingStandard\Examples;
 
-
 class ValidClass
 {
 	protected const CHILD_COUNT = 1,
@@ -82,6 +81,16 @@ class ValidClass
 		$sum += 5;
 
 		return (array) $sum;
+	}
+
+
+	protected function operatorMethod($one, $two, $three)
+	{
+		$a = $one ? $two : $three;
+		$b = $one ?: $two;
+		$c = $a ?? $b;
+
+		return $c;
 	}
 
 
