@@ -14,6 +14,4 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 
 	//$services->set(PhpCsFixer\Fixer\Basic\NonPrintableCharacterFixer::class)
 	//->call('configure', [['use_escape_sequences_in_strings' => true]]);
-
-	$services->set(PhpCsFixer\Fixer\StringNotation\EscapeImplicitBackslashesFixer::class);
 };

@@ -8,7 +8,4 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 
 	// Functions should be used with `$strict` param set to `true`
 	$services->set(PhpCsFixer\Fixer\Strict\StrictParamFixer::class);
-
-	// replaces is_null(parameter) expression with `null === parameter`.
-	$services->set(PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer::class);
 };
