@@ -61,7 +61,7 @@ class ValidClass
 
 		while($a < 10)
 		{
-			if(true)
+			if($a)
 			{
 				$a++;
 			}
@@ -78,7 +78,11 @@ class ValidClass
 	protected function anotherMethod($someArgument, $anotherArgument)
 	{
 		$sum = $someArgument + $anotherArgument;
-		$sum += 5;
+
+		if(is_null($anotherArgument))
+		{
+			$sum += 5;
+		}
 
 		return (array) $sum;
 	}
@@ -91,6 +95,19 @@ class ValidClass
 		$c = $a ?? $b;
 
 		return $c;
+	}
+
+
+	protected function stringMethod($string)
+	{
+		preg_match('/\w+([\/\(\)])/', $string);
+
+		$string .= '\ModulIS\Example\\';
+		$string .= "Object\Record";
+
+		echo "Metoda $string neexistuje";
+
+		throw new \Exception("Instance of 'ModulIS\Record' expected, '" . $string . "' given .");
 	}
 
 
