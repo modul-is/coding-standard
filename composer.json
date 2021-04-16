@@ -12,7 +12,8 @@
 		"php": ">=7.3.0",
 		"symplify/easy-coding-standard": "^9",
 		"symplify/coding-standard": "^9",
-		"slevomat/coding-standard": "^6"
+		"slevomat/coding-standard": "^6",
+		"symplify/set-config-resolver": "9.1.9"
 	},
 
 	"require-dev": {
