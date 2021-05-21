@@ -13,7 +13,8 @@
 		"symplify/easy-coding-standard": "^9",
 		"symplify/coding-standard": "^9",
 		"slevomat/coding-standard": "^6",
-		"symplify/set-config-resolver": "9.1.9"
+		"symplify/set-config-resolver": "9.1.9",
+		"symplify/symplify-kernel": "9.3.0"
 	},
 
 	"require-dev": {
