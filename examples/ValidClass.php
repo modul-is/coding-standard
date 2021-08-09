@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Nette\CodingStandard\Examples;
 
+trait testTrait
+{
+	function a() {}
+}
+
 class ValidClass
 {
 	protected const CHILD_COUNT = 1,

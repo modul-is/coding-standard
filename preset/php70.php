@@ -27,4 +27,7 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 		->call('configure', [[
 			'annotations' => ['param', 'return', 'flash', 'redraw', 'redirect']
 		]]);
+
+	// Component factory must have a set return type.
+	$services->set(Nette\CodingStandard\Fixer\ReturnNotation\FactoryReturnTypeFixer::class);
 };

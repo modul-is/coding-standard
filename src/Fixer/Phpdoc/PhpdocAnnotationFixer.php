@@ -77,9 +77,9 @@ public function Foo($id) {}
 	 */
 	protected function applyFix(\SplFileInfo $file, Tokens $tokens)
 	{
-		foreach ($tokens as $index => $token)
+		foreach($tokens as $index => $token)
 		{
-			if (!$token->isGivenKind(T_DOC_COMMENT))
+			if(!$token->isGivenKind(T_DOC_COMMENT))
 			{
 				continue;
 			}

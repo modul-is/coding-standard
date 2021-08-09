@@ -33,6 +33,16 @@ interface IValidClassFactory
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * Must run after NoTrailingWhitespaceFixer
+	 */
+	public function getPriority()
+	{
+		return -1;
+	}
+
+	/**
+	 * {@inheritdoc}
 	 */
 	public function isCandidate(Tokens $tokens)
 	{
@@ -58,7 +68,7 @@ interface IValidClassFactory
 
 			$newTokens = Tokens::fromCode($newContent);
 
-			foreach ($newTokens as $index => $token)
+			foreach($newTokens as $index => $token)
 			{
 				$newTokens[$index] = new Token($token->getContent());
 			}

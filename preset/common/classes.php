@@ -22,9 +22,15 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 		]]);
 
 	// All Class and Trait elements should have visibility required
-	$services->set(Nette\CodingStandard\Fixer\ClassNotation\ClassAndTraitVisibilityRequiredFixer::class)
+	$services->set(Nette\CodingStandard\Fixer\ClassNotation\TestFixer::class)
 		->call('configure', [[
-			'elements' => ['property', 'method'],
+			'elements' => ['property', 'method']
+		]]);
+
+	// Constants and Properties should be separated by 1 blank line
+	$services->set(Nette\CodingStandard\Fixer\ClassNotation\ClassAttributesSeparationFixer::class)
+		->call('configure', [[
+			'elements' => ['const', 'property']
 		]]);
 
 	// Traits
