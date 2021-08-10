@@ -6,4 +6,6 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 	$containerConfigurator->import(__DIR__ . '/common/*.php');
 
 	$services = $containerConfigurator->services();
+
+	$services->set(Nette\CodingStandard\Fixer\Basic\DumpFixer::class);
 };

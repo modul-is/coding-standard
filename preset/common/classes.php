@@ -22,7 +22,7 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 		]]);
 
 	// All Class and Trait elements should have visibility required
-	$services->set(Nette\CodingStandard\Fixer\ClassNotation\TestFixer::class)
+	$services->set(Nette\CodingStandard\Fixer\ClassNotation\ClassAndTraitVisibilityRequiredFixer::class)
 		->call('configure', [[
 			'elements' => ['property', 'method']
 		]]);
