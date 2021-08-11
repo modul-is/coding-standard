@@ -22,10 +22,10 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 	$services->set(SlevomatCodingStandard\Sniffs\Namespaces\UseDoesNotStartWithBackslashSniff::class);
 
 	// Looks for unused imports from other namespaces.
-	$services->set(SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class)
+	/*$services->set(SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class)
 		->property('searchAnnotations', 'yes')
 		->property('ignoredAnnotationNames', ['@testCase'])
-		->property('ignoredAnnotations', ['@internal']);
+		->property('ignoredAnnotations', ['@internal']);*/
 
 	$services->set(SlevomatCodingStandard\Sniffs\Namespaces\UselessAliasSniff::class);
 

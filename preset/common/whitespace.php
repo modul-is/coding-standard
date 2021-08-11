@@ -66,7 +66,7 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 	// PROPERTY
 
 	// Checks that there is a certain number of blank lines between properties
-	$services->set(SlevomatCodingStandard\Sniffs\Classes\PropertySpacingSniff::class);
+	//$services->set(SlevomatCodingStandard\Sniffs\Classes\PropertySpacingSniff::class); //conflicts with PHP 8 attributes
 
 	$services->set(SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSpacingSniff::class);
 
@@ -91,8 +91,8 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 		]]);
 
 	// Arrow functions formatting
-	$services->set(SlevomatCodingStandard\Sniffs\Functions\ArrowFunctionDeclarationSniff::class);
-		//->property('spacesCountAfterKeyword', 0); // does not work with FunctionDeclarationFixer #41
+	$services->set(SlevomatCodingStandard\Sniffs\Functions\ArrowFunctionDeclarationSniff::class)
+		->property('spacesCountAfterKeyword', 0);
 
 	// CLASS
 

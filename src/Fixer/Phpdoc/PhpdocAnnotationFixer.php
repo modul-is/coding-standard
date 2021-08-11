@@ -44,10 +44,11 @@ public function Foo($id) {}
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * Must run before NoEmptyPhpdocFixer
 	 */
 	public function getPriority()
 	{
-		// should be run before NoEmptyPhpdocFixer
 		return 6;
 	}
 

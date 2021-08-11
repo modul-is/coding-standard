@@ -43,10 +43,7 @@ class ValidClass
 	{
 		$a = '1';
 
-		$b = function($a)
-		{
-			return (int) $a;
-		};
+		$b = fn($a) => (int) $a;
 	}
 
 
