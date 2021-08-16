@@ -4,29 +4,19 @@ declare(strict_types=1);
 
 namespace Nette\CodingStandard\Examples;
 
-use Nette\Application\UI\Presenter;
-use Nette\Database\Explorer;
 use Nette\DI\Attributes\Inject;
 use Nette\Application\Attributes\Persistent;
+use Nette\Application\UI\Presenter;
+use Nette\Database\Explorer;
 
 class ValidPresenter extends Presenter
 {
-	/**
-	 * @var string
-	 * @persistent
-	 */
-	public $property;
+	#[Persistent]
+	public string $property;
 
-	/**
-	 * @var \My\Model
-	 * @inject
-	 */
-	public $model;
+	#[Inject]
+	public \My\Model $model;
 
-	/**
-	 * @var Explorer
-	 * @inject
-	 * @persistent
-	 */
-	public $database;
+	#[Inject, Persistent]
+	public Explorer $database;
 }

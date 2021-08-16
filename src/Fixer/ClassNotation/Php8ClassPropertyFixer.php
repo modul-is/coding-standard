@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nette\CodingStandard\Fixer\ClassNotation;
 
+use Nette\Utils\Strings;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -63,7 +64,7 @@ class ValidPresenter extends Presenter
 	 */
 	public function isCandidate(Tokens $tokens)
 	{
-		return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
+		return true;
 	}
 
 	/**
@@ -73,32 +74,35 @@ class ValidPresenter extends Presenter
 	{
 		$content = $tokens->generateCode();
 
-		$pattern = '/\/\*\*((?:\R[ \t]*\*[ \t]*@(?:inject|persistent|var)[ \t\S]*)+)\R[ \t]*\*\/\R[ \t]*(\w+) (\$\w+;)/';
+		$globalAttributeArray = [];
 
-		Preg::matchAll($pattern, $content, $matches, PREG_SET_ORDER);
+		$propertyPattern = '/\/\*\*((?:\R[ \t]*\*[ \t]*@(?:inject|persistent|var)[ \t\S]*)+)\R[ \t]*\*\/\R[ \t]*(\w+) (\$\w+;)/';
+		$annotationPattern = '/@(inject|persistent|var)(?: (.+))?/';
+		$usePattern = '/(namespace .*\R+)(use)?/';
 
-		foreach($matches as $match)
+		Preg::matchAll($propertyPattern, $content, $propertyArray, PREG_SET_ORDER);
+
+		foreach($propertyArray as $property)
 		{
 			$dataType = '';
 			$attributeArray = [];
 
-			$annotationArray = explode("\t", trim(str_replace('*', '', $match[1])));
+			Preg::matchAll($annotationPattern, $property[1], $annotationArray, PREG_SET_ORDER);
 
 			foreach($annotationArray as $annotation)
 			{
-				$wordArray = explode(' ', $annotation);
+				if($annotation[1] === 'var' && isset($annotation[2]))
+				{
+					$dataType = trim($annotation[2]);
+				}
+				elseif(in_array($annotation[1], ['inject', 'persistent'], true))
+				{
+					$attributeArray[] = Strings::firstUpper($annotation[1]);
 
-				if($wordArray[0] === '@var' && isset($wordArray[1]))
-				{
-					$dataType = $wordArray[1];
-				}
-				elseif($wordArray[0] === '@inject')
-				{
-					$attributeArray[] = 'Inject';
-				}
-				elseif($wordArray[0] === '@persistent')
-				{
-					$attributeArray[] = 'Persistent';
+					if(!in_array($annotation[1], $globalAttributeArray, true))
+					{
+						$globalAttributeArray[] = $annotation[1];
+					}
 				}
 			}
 
@@ -106,15 +110,32 @@ class ValidPresenter extends Presenter
 
 			if($attributeArray)
 			{
-				$output .= '#[' . implode(', ', $attributeArray) . "]\n";
+				$output .= '#[' . implode(', ', $attributeArray) . ']' . PHP_EOL . "\t";
 			}
 
-			$output .= $match[2] . ' ';
+			$output .= $property[2] . ' ';
 			$output .= $dataType ? $dataType . ' ' : null;
-			$output .= $match[3];
+			$output .= $property[3];
 
-			$content = str_replace($match[0], $output, $content);
-			file_put_contents('bs.txt', $content);
+			$content = str_replace($property[0], $output, $content);
+		}
+
+		foreach($globalAttributeArray as $attribute)
+		{
+			if($attribute === 'inject')
+			{
+				$path = 'Nette\DI\Attributes\Inject';
+			}
+			elseif($attribute === 'persistent')
+			{
+				$path = 'Nette\Application\Attributes\Persistent';
+			}
+
+			if(isset($path) && !Strings::contains($content, 'use ' . $path))
+			{
+				Preg::match($usePattern, $content, $matches);
+				$content = Preg::replace($usePattern, $matches[1] . 'use ' . $path . ';' . PHP_EOL . ($matches[2] ?? PHP_EOL), $content);
+			}
 		}
 
 		$newTokens = Tokens::fromCode($content);

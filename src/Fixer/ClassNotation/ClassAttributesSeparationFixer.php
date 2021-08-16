@@ -204,14 +204,16 @@ class Sample
      */
     private function fixSpaceAboveClassElement(Tokens $tokens, $classStartIndex, $elementIndex)
     {
-        static $methodAttr = [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_ABSTRACT, T_FINAL, T_STATIC, T_STRING, T_NS_SEPARATOR, T_VAR, CT::T_NULLABLE_TYPE];
+        static $methodAttr = [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_ABSTRACT, T_FINAL, T_STATIC, T_STRING, T_NS_SEPARATOR, T_VAR, CT::T_NULLABLE_TYPE, CT::T_ARRAY_TYPEHINT, CT::T_TYPE_ALTERNATION];
 
         $nonWhiteAbove = null;
 
         // find out where the element definition starts
         $firstElementAttributeIndex = $elementIndex;
+
         for ($i = $elementIndex; $i > $classStartIndex; --$i) {
-            $nonWhiteAbove = $tokens->getNonWhitespaceSibling($i, -1);
+            $nonWhiteAbove = $tokens->getPrevNonWhitespace($i);
+
             if (null !== $nonWhiteAbove && $tokens[$nonWhiteAbove]->isGivenKind($methodAttr)) {
                 $firstElementAttributeIndex = $nonWhiteAbove;
             } else {
@@ -219,7 +221,7 @@ class Sample
             }
         }
 
-        // deal with comments above a element
+        // deal with comments above an element
         if ($tokens[$nonWhiteAbove]->isGivenKind(T_COMMENT)) {
             if (1 === $firstElementAttributeIndex - $nonWhiteAbove) {
                 // no white space found between comment and element start
@@ -243,7 +245,7 @@ class Sample
                 $this->correctLineBreaks($tokens, $nonWhiteAbove, $firstElementAttributeIndex, 1);
                 //    ... and make sure there is blank line above the comment (with the exception when it is directly after a class opening)
                 $nonWhiteAbove = $this->findCommentBlockStart($tokens, $nonWhiteAbove);
-                $nonWhiteAboveComment = $tokens->getNonWhitespaceSibling($nonWhiteAbove, -1);
+                $nonWhiteAboveComment = $tokens->getPrevNonWhitespace($nonWhiteAbove);
 
                 $this->correctLineBreaks($tokens, $nonWhiteAboveComment, $nonWhiteAbove, $nonWhiteAboveComment === $classStartIndex ? 1 : 2);
             } else {
@@ -255,20 +257,34 @@ class Sample
             return;
         }
 
-        // deal with element without a PHPDoc above it
-        if (false === $tokens[$nonWhiteAbove]->isGivenKind(T_DOC_COMMENT)) {
-            $this->correctLineBreaks($tokens, $nonWhiteAbove, $firstElementAttributeIndex, $nonWhiteAbove === $classStartIndex ? 1 : 2);
+        // deal with element with a PHPDoc above it
+        if ($tokens[$nonWhiteAbove]->isGivenKind(T_DOC_COMMENT)) {
+            // there should be one linebreak between the element and the PHPDoc above it
+            $this->correctLineBreaks($tokens, $nonWhiteAbove, $firstElementAttributeIndex, 1);
+
+            // there should be one blank line between the PHPDoc and whatever is above (with the exception when it is directly after a class opening)
+            $nonWhiteAbovePHPDoc = $tokens->getPrevNonWhitespace($nonWhiteAbove);
+            $this->correctLineBreaks($tokens, $nonWhiteAbovePHPDoc, $nonWhiteAbove, $nonWhiteAbovePHPDoc === $classStartIndex ? 1 : 2);
 
             return;
         }
 
-        // there should be one linebreak between the element and the PHPDoc above it
-        $this->correctLineBreaks($tokens, $nonWhiteAbove, $firstElementAttributeIndex, 1);
+        // deal with element with an attribute above it
+        if ($tokens[$nonWhiteAbove]->isGivenKind(CT::T_ATTRIBUTE_CLOSE)) {
+            // there should be one linebreak between the element and the attribute above it
+            $this->correctLineBreaks($tokens, $nonWhiteAbove, $firstElementAttributeIndex, 1);
 
-        // there should be one blank line between the PHPDoc and whatever is above (with the exception when it is directly after a class opening)
-        $nonWhiteAbovePHPDoc = $tokens->getNonWhitespaceSibling($nonWhiteAbove, -1);
-        $this->correctLineBreaks($tokens, $nonWhiteAbovePHPDoc, $nonWhiteAbove, $nonWhiteAbovePHPDoc === $classStartIndex ? 1 : 2);
-    }
+            // make sure there is blank line above the comment (with the exception when it is directly after a class opening)
+            $nonWhiteAbove = $this->findAttributeBlockStart($tokens, $nonWhiteAbove);
+            $nonWhiteAboveComment = $tokens->getPrevNonWhitespace($nonWhiteAbove);
+
+            $this->correctLineBreaks($tokens, $nonWhiteAboveComment, $nonWhiteAbove, $nonWhiteAboveComment === $classStartIndex ? 1 : 2);
+
+            return;
+        }
+
+        $this->correctLineBreaks($tokens, $nonWhiteAbove, $firstElementAttributeIndex, $nonWhiteAbove === $classStartIndex ? 1 : 2);
+	}
 
     /**
      * @param int $startIndex
@@ -352,6 +368,30 @@ class Sample
         for ($i = $commentIndex - 1; $i > 0; --$i) {
             if ($tokens[$i]->isComment()) {
                 $start = $i;
+
+                continue;
+            }
+
+            if (!$tokens[$i]->isWhitespace() || $this->getLineBreakCount($tokens, $i, $i + 1) > 1) {
+                break;
+            }
+        }
+
+        return $start;
+    }
+
+    /**
+     * @param int $index attribute close index
+     *
+     * @return int
+     */
+    private function findAttributeBlockStart(Tokens $tokens, $index)
+    {
+        $start = $index = $tokens->findBlockStart(Tokens::BLOCK_TYPE_ATTRIBUTE, $index);
+
+        for ($i = $index - 1; $i > 0; --$i) {
+            if ($tokens[$i]->isGivenKind(CT::T_ATTRIBUTE_CLOSE)) {
+                $start = $i = $tokens->findBlockStart(Tokens::BLOCK_TYPE_ATTRIBUTE, $i);
 
                 continue;
             }

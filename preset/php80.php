@@ -13,4 +13,7 @@ return function (Symfony\Component\DependencyInjection\Loader\Configurator\Conta
 
 	// Convert class properties to PHP8 format
 	$services->set(Nette\CodingStandard\Fixer\ClassNotation\Php8ClassPropertyFixer::class);
+
+	// Convert entity properties to PHP8 format
+	$services->set(Nette\CodingStandard\Fixer\ClassNotation\Php8EntityPropertyFixer::class);
 };
