@@ -14,5 +14,7 @@ class ValidEntity extends \ModulIS\Entity
 
 	public string|null $other_text;
 
-	public json $data;
+	public array $data;
+
+	public \Nette\Utils\Datetime $date;
 }

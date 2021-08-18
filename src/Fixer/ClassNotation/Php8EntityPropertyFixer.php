@@ -79,6 +79,15 @@ class ValidEntity extends \ModulIS\Entity
 		{
 			if(isset($match[1], $match[2], $match[3]))
 			{
+				if($match[2] === 'json')
+				{
+					$match[2] = 'array';
+				}
+				elseif($match[2] === 'date')
+				{
+					$match[2] = '\Nette\Utils\Datetime';
+				}
+
 				$annotationArray[] = 'public ' . $match[2] . ' ' . trim($match[3]) . ';';
 			}
 		}
