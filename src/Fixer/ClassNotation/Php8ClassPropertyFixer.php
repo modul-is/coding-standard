@@ -93,7 +93,14 @@ class ValidPresenter extends Presenter
 			{
 				if($annotation[1] === 'var' && isset($annotation[2]))
 				{
-					$dataType = trim($annotation[2]);
+					if(Strings::contains($annotation[2], '[]'))
+					{
+						$dataType = (Strings::contains($annotation[2], 'null') ? '?' : null) . 'array';
+					}
+					else
+					{
+						$dataType = trim($annotation[2]);
+					}
 				}
 				elseif(in_array($annotation[1], ['inject', 'persistent'], true))
 				{
