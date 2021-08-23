@@ -76,7 +76,7 @@ class ValidPresenter extends Presenter
 
 		$globalAttributeArray = [];
 
-		$propertyPattern = '/\/\*\*((?:\R[ \t]*\*[ \t]*@(?:inject|persistent|var)[ \t\S]*)+)\R[ \t]*\*\/\R[ \t]*(\w+) (\$\w+;)/';
+		$propertyPattern = '/\/\*\*((?:\R[ \t]*\*[ \t]*@(?:inject|persistent|var)[ \t\S]*)+)\R[ \t]*\*\/\R[ \t]*(\w+(?: static)?) (\$\w+(?: = .*)?;)/';
 		$annotationPattern = '/@(inject|persistent|var)(?: (.+))?/';
 		$usePattern = '/(namespace .*\R+)(use)?/';
 

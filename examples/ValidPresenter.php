@@ -19,4 +19,6 @@ class ValidPresenter extends Presenter
 
 	#[Inject, Persistent]
 	public Explorer $database;
+
+	private static array $array = [1, 2, 3];
 }
