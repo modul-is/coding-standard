@@ -6,6 +6,7 @@ namespace Nette\CodingStandard\Examples;
 
 class ValidEntity extends \ModulIS\Entity
 {
+	#[\ModulIS\Readonly]
 	public int $id;
 
 	public int|null $number;

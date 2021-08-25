@@ -88,7 +88,7 @@ class ValidEntity extends \ModulIS\Entity
 					$match[2] = '\Nette\Utils\Datetime';
 				}
 
-				$annotationArray[] = 'public ' . $match[2] . ' ' . trim($match[3]) . ';';
+				$annotationArray[] = ($match[1] === 'property-read' ? '#[\ModulIS\Readonly]' . PHP_EOL . "\t" : null) . 'public ' . $match[2] . ' ' . trim($match[3]) . ';';
 			}
 		}
 
