@@ -46,7 +46,7 @@ interface IValidClassFactory
 	 */
 	public function isCandidate(Tokens $tokens)
 	{
-		return $tokens->isTokenKindFound(T_INTERFACE);
+		return true;
 	}
 
 	/**
@@ -56,7 +56,7 @@ interface IValidClassFactory
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(interface I(\w+)Factory\s*{.*function create\(\))(.*);/s';
+		$string = '/(interface I?(\w+)Factory\s*{.*function create\(\))(.*);/s';
 
 		Preg::match($string, $content, $matches);
 
