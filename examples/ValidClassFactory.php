@@ -6,5 +6,5 @@ namespace Nette\CodingStandard\Examples;
 
 interface ValidClassFactory
 {
-	function create();
+	function create(): ValidClass;
 }

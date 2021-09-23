@@ -19,10 +19,10 @@ php ecs check [target directory] --fix
 ```
 
 Your PHP version is detected automatically but if you want to use fixers for a different version,
-you can use the `config` parameter
+you can use the `preset` parameter
 
 ```
-php ecs check [target directory] --config coding-standard-php56.yml --fix
+php ecs check [target directory] --preset php71 --fix
 ```
 
 #### Check SQL settings
