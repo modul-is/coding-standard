@@ -83,6 +83,10 @@ class ValidEntity extends \ModulIS\Entity
 				{
 					$match[2] = 'array';
 				}
+				elseif($match[2] === 'double')
+				{
+					$match[2] = 'float';
+				}
 				elseif($match[2] === 'date')
 				{
 					$match[2] = '\Nette\Utils\Datetime';
