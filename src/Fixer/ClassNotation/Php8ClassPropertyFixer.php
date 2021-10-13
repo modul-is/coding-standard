@@ -93,9 +93,13 @@ class ValidPresenter extends Presenter
 			{
 				if($annotation[1] === 'var' && isset($annotation[2]))
 				{
-					if(Strings::contains($annotation[2], '[]') || $annotation[2] === 'callable')
+					if(Strings::contains($annotation[2], '[]'))
 					{
-						$dataType = (Strings::contains($annotation[2], 'null') ? '?' : null) . 'array';
+						$dataType = (Strings::contains($annotation[2], '?') || Strings::contains($annotation[2], 'null') ? '?' : null) . 'array';
+					}
+					elseif(Strings::contains($annotation[2], 'callable'))
+					{
+						$dataType = 'array|\Closure' . (Strings::contains($annotation[2], '?') || Strings::contains($annotation[2], 'null') ? '|null' : null);
 					}
 					else
 					{
