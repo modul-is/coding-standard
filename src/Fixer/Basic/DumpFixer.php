@@ -57,7 +57,7 @@ die;
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(?:\S*dump|die)(?:\(.*\))*;\s*/';
+		$string = '/(?:(?<!->)[a-z_]*dump|die)(?:\(.*\))*;\s*/';
 
 		$newContent = preg_replace($string, '', $content);
 
