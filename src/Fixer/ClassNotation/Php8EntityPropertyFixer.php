@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nette\CodingStandard\Fixer\ClassNotation;
 
+use Nette\Utils\Strings;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -79,17 +80,17 @@ class ValidEntity extends \ModulIS\Entity
 		{
 			if(isset($match[1], $match[2], $match[3]))
 			{
-				if($match[2] === 'json')
+				if(Strings::contains($match[2], 'json'))
 				{
-					$match[2] = 'array';
+					$match[2] = Strings::contains($match[2], 'null') ? 'array|null' : 'array';
 				}
-				elseif($match[2] === 'double')
+				elseif(Strings::contains($match[2], 'double'))
 				{
-					$match[2] = 'float';
+					$match[2] = Strings::contains($match[2], 'null') ? 'float|null' : 'float';
 				}
-				elseif($match[2] === 'date')
+				elseif(Strings::contains($match[2], 'date'))
 				{
-					$match[2] = '\Nette\Utils\Datetime';
+					$match[2] = Strings::contains($match[2], 'null') ? '\Nette\Utils\Datetime|null' : '\Nette\Utils\Datetime';
 				}
 
 				$annotationArray[] = ($match[1] === 'property-read' ? '#[\ModulIS\Attribute\Readonly]' . PHP_EOL . "\t" : null) . 'public ' . $match[2] . ' ' . trim($match[3]) . ';';
