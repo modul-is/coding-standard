@@ -90,7 +90,7 @@ class ValidEntity extends \ModulIS\Entity
 				}
 				elseif(Strings::contains($match[2], 'date'))
 				{
-					$match[2] = Strings::contains($match[2], 'null') ? '\Nette\Utils\Datetime|null' : '\Nette\Utils\Datetime';
+					$match[2] = Strings::contains($match[2], 'null') ? '\Nette\Utils\DateTime|null' : '\Nette\Utils\DateTime';
 				}
 
 				$annotationArray[] = ($match[1] === 'property-read' ? '#[\ModulIS\Attribute\Readonly]' . PHP_EOL . "\t" : null) . 'public ' . $match[2] . ' ' . trim($match[3]) . ';';
