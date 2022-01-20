@@ -11,10 +11,7 @@ class ValidClass
 
 	private const DREAM_COUNT = 250;
 
-	/**
-	 * @var array
-	 */
-	public $listOfEmotions = [
+	public array $listOfEmotions = [
 		'love',
 		'happiness'
 	];
@@ -76,7 +73,7 @@ class ValidClass
 	{
 		$sum = $someArgument + $anotherArgument;
 
-		if(is_null($anotherArgument))
+		if($anotherArgument === null)
 		{
 			$sum += 5;
 		}
@@ -100,11 +97,11 @@ class ValidClass
 		preg_match('/\w+([\/\(\)])/', $string);
 
 		$string .= '\ModulIS\Example\\';
-		$string .= "Object\Record";
+		$string .= 'Object\\Record';
 
 		echo "Metoda $string neexistuje";
 
-		throw new \Exception("Instance of 'ModulIS\Record' expected, '" . $string . "' given .");
+		throw new \Exception("Instance of 'ModulIS\\Record' expected, '" . $string . "' given .");
 	}
 
 
