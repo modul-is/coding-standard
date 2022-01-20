@@ -141,7 +141,4 @@ https://github.com/slevomat/coding-standard
 
 	<!-- Disallows multi property definition. -->
 	<rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
-
-	<!-- Enforces method signature to be splitted to more lines so each parameter is on its own line. -->
-	<rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature"/>
 </ruleset>

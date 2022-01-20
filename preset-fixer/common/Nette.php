@@ -18,7 +18,7 @@ return [
 
 	// In the argument list, there must be one space after each comma, and there must no be a space before each comma
 	'method_argument_space' => false,
-	'Nette/method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
+	'Nette/method_argument_space' => [],
 
 	// Spaces should be properly placed in a function declaration.
 	'function_declaration' => false,
@@ -81,7 +81,7 @@ return [
 	'native_function_casing' => true,
 
 	// Replaces `intval`, `floatval`, `doubleval`, `strval` and `boolval` function calls with according type casting operator
-	'modernize_types_casting' => true,
+	'modernize_types_casting' => false,
 
 	// Short cast `bool` using double exclamation mark should not be used
 	'no_short_bool_cast' => true,
