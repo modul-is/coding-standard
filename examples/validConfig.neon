@@ -1,5 +1,5 @@
 coding-standard:
-    awesome: true
+	awesome: true
 	support:
 		- PHP
 		- Latte

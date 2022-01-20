@@ -26,14 +26,13 @@ use const T_WHITESPACE;
 
 class RequireMultiLineTernaryOperatorSniff implements Sniff
 {
-
 	public const CODE_MULTI_LINE_TERNARY_OPERATOR_NOT_USED = 'MultiLineTernaryOperatorNotUsed';
 
 	private const TAB_INDENT = "\t";
 	private const SPACES_INDENT = '    ';
 
 	/** @var int */
-	public $lineLengthLimit = 90;
+	public $lineLengthLimit = 180;
 
 	/** @var int|null */
 	public $expressionsMinLength = 20;

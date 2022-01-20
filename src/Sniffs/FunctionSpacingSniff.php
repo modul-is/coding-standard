@@ -15,7 +15,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class FunctionSpacingSniff implements Sniff
 {
-
     /**
      * The number of blank lines between functions.
      *
