@@ -92,7 +92,7 @@ file_put_contents($fileList, implode("\n", iterator_to_array($finder)));
 // PHP CS Fixer
 passthru(
 	'php ' . escapeshellarg($vendorDir . '/friendsofphp/php-cs-fixer/php-cs-fixer')
-	. ' fix -v'
+	. ' fix -v --diff'
 	. ($dry ? ' --dry-run' : '')
 	. ' --config ' . escapeshellarg(__DIR__ . "/preset-fixer/$preset.php"),
 	$code
