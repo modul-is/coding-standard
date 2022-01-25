@@ -96,9 +96,6 @@ https://github.com/slevomat/coding-standard
 		</properties> -->
 	</rule>
 
-	<!-- Enforces conditions of if, elseif, while and do-while with one or more boolean operators to be splitted to more lines so each condition part is on its own line -->
-	<rule ref="../src/Sniffs/RequireMultiLineConditionSniff.php"/>
-
 	<!-- Class names should be referenced via ::class constant when possible -->
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference">
 		<properties>

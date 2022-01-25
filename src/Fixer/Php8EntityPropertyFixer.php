@@ -78,7 +78,6 @@ class ValidEntity extends \ModulIS\Entity
 
 		foreach($matches as $match)
 		{
-			//print_r($match);
 			if(isset($match[1], $match[2], $match[3]))
 			{
 				if(strpos($match[2], 'json') !== false)
