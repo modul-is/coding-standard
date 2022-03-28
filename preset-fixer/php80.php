@@ -16,7 +16,10 @@ $rules = [
 	'ModulIS/php8_entity_property' => true,
 
 	// Rename entity Readonly attribute to ReadonlyProperty
-	'ModulIS/entity_readonly' => true
+	'ModulIS/entity_readonly' => true,
+
+	// Convert constructors to PHP8
+	'ModulIS/php8_constructor' => true
 ];
 
 $config->setRules($rules + $config->getRules());

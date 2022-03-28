@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nette\CodingStandard\Examples;
 
-
 class ValidDial
 {
 	public const C1 = 'A';

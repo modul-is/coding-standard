@@ -11,11 +11,6 @@ class ValidClass
 
 	private const DREAM_COUNT = 250;
 
-	public array $listOfEmotions = [
-		'love',
-		'happiness'
-	];
-
 	protected $listOfSkills = [
 		'empathy',
 		'respect'
@@ -29,10 +24,13 @@ class ValidClass
 
 	public function __construct
 	(
-		array $listOfEmotions
+		public array $listOfEmotions,
+		array $listOfSkills,
+		array $listOfElements
 	)
 	{
-		$this->listOfEmotions = $listOfEmotions;
+		$this->listOfSkills = $listOfSkills;
+		$this->listOfElements = $listOfElements;
 	}
 
 
