@@ -63,7 +63,7 @@ public function __construct
 		$content = $tokens->generateCode();
 
 		$propertyPattern = '/(#\[[\w\\\\]+\])?\s*((?:public|protected|private) )((?:[\w\\\\?|]+) )?\$(\w+);/';
-		$constructorPattern = '/public function __construct\s*\(([\w\s$,]*)\)\s*{([\w\s\->$=;]*)}/';
+		$constructorPattern = '/public function __construct\s*\(([\w\s$,\\\\]*)\)\s*{([\w\s\->$=;]*)}/';
 
 		$propertyArray = [];
 
