@@ -91,9 +91,6 @@ return [
 
 	'no_unneeded_curly_braces' => true,
 
-	// Remove trailing commas in list() calls.
-	'no_trailing_comma_in_list_call' => true,
-
 	// Removes unneeded parentheses around control statements.
 	'no_unneeded_control_parentheses' => true,
 
@@ -132,7 +129,7 @@ return [
 
 	// commas
 	'trailing_comma_in_multiline' => ['elements' => []],
-	'no_trailing_comma_in_singleline_array' => true,
+	'no_trailing_comma_in_singleline' => true,
 	'ModulIS/no_trailing_comma_in_multiline_array' => true,
 
 	'array_syntax' => ['syntax' => 'short'],
