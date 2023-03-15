@@ -96,9 +96,6 @@ https://github.com/slevomat/coding-standard
 		</properties> -->
 	</rule>
 
-	<!-- Enforces conditions of if, elseif, while and do-while with one or more boolean operators to be splitted to more lines so each condition part is on its own line -->
-	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineCondition"/>
-
 	<!-- Class names should be referenced via ::class constant when possible -->
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference">
 		<properties>
@@ -126,9 +123,6 @@ https://github.com/slevomat/coding-standard
 
 	<!-- DOCBLOCK -->
 
-	<!-- Require comments with single-line content to be written as one-liners -->
-	<rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
-
 	<!-- Checks for useless doc comments. If the native method declaration contains everything -->
 	<rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
 	<rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
@@ -144,9 +138,6 @@ https://github.com/slevomat/coding-standard
 
 	<!-- Disallows multi property definition. -->
 	<rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
-
-	<!-- Enforces method signature to be splitted to more lines so each parameter is on its own line. -->
-	<rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature"/>
 
 
 	<!-- MISC -->
@@ -250,7 +241,6 @@ https://github.com/slevomat/coding-standard
 			</property>
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine"/>
 	<rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
