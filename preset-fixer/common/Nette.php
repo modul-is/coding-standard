@@ -9,12 +9,29 @@ return [
 	'single_line_after_imports' => false, // Nette uses two empty lines
 	'blank_line_after_namespace' => false,
 	'ordered_imports' => true, // Use statements are alphabetically ordered
+	'blank_line_between_import_groups' => false,
+
+	// braces split
+	'braces' => false,
+	// Ensures a single space after language constructs
+	'single_space_after_construct' => false,
+	// The body of each control structure MUST be enclosed within braces
+	'control_structure_braces' => true,
+	// Control structure continuation keyword must be on the configured line
+	'control_structure_continuation_position' => false,
+	// There must not be spaces around declare statement parentheses
+	'declare_parentheses' => true,
+	// There must not be more than one statement per line
+	'no_multiple_statements_per_line' => false,
+
 
 	// overriden rules
-	'braces' => false,
-	'Nette/braces' => [
-		'allow_single_line_closure' => true,
-	],
+
+	// Curly braces must be placed as configured
+	'Nette/curly_braces_position' => false,
+
+	// Each statement must be indented
+	'Nette/statement_indentation' => true,
 
 	// In the argument list, there must be one space after each comma, and there must no be a space before each comma
 	'method_argument_space' => false,
@@ -91,6 +108,9 @@ return [
 
 	'no_unneeded_curly_braces' => true,
 
+	// Remove trailing commas in list() calls.
+	'no_trailing_comma_in_singleline' => true,
+
 	// Removes unneeded parentheses around control statements.
 	'no_unneeded_control_parentheses' => true,
 
@@ -129,7 +149,6 @@ return [
 
 	// commas
 	'trailing_comma_in_multiline' => ['elements' => []],
-	'no_trailing_comma_in_singleline' => true,
 	'ModulIS/no_trailing_comma_in_multiline_array' => true,
 
 	'array_syntax' => ['syntax' => 'short'],
@@ -147,6 +166,9 @@ return [
 	'single_quote' => true,
 
 	'escape_implicit_backslashes' => true,
+
+	// Convert ${..} to {$..}
+	'simple_to_complex_string_variable' => true,
 
 
 	// PHPDoc
