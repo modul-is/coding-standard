@@ -87,15 +87,6 @@ https://github.com/slevomat/coding-standard
 	<!-- Reports new with useless parentheses. -->
 	<rule ref="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses"/>
 
-	<!-- Ternary operator has to be reformatted to more lines when the line length exceeds the given limit. -->
-	<rule ref="../src/Sniffs/RequireMultiLineTernaryOperatorSniff.php">
-	<!-- is ignored...
-		<properties>
-			<property name="lineLengthLimit" value="90"/>
-			<property name="expressionsMinLength" value="20"/>
-		</properties> -->
-	</rule>
-
 	<!-- Class names should be referenced via ::class constant when possible -->
 	<rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference">
 		<properties>
@@ -263,9 +254,6 @@ https://github.com/slevomat/coding-standard
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch">
 		<exclude name="SlevomatCodingStandard.ControlStructures.NewWithoutParentheses.UselessParentheses"/>
-	</rule>
-	<rule ref="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator">
-		<exclude name="SlevomatCodingStandard.ControlStructures.RequireMultiLineTernaryOperator.MultiLineTernaryOperatorNotUsed"/>
 	</rule>
 	<rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
 	<rule ref="SlevomatCodingStandard.ControlStructures.UselessTernaryOperator"/>
