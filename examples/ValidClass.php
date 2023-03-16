@@ -44,8 +44,6 @@ class ValidClass
 
 	/**
 	 * Foo
-	 *
-	 * @todo Add bar
 	 */
 	public function validMethod(): int
 	{
