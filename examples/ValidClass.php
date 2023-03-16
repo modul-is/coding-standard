@@ -11,14 +11,6 @@ class ValidClass
 
 	private const DREAM_COUNT = 250;
 
-	/**
-	 * @var array
-	 */
-	public $listOfEmotions = [
-		'love',
-		'happiness'
-	];
-
 	protected $listOfSkills = [
 		'empathy',
 		'respect'
@@ -32,10 +24,13 @@ class ValidClass
 
 	public function __construct
 	(
-		array $listOfEmotions
+		public array $listOfEmotions,
+		array $listOfSkills,
+		array $listOfElements
 	)
 	{
-		$this->listOfEmotions = $listOfEmotions;
+		$this->listOfSkills = $listOfSkills;
+		$this->listOfElements = $listOfElements;
 	}
 
 
@@ -43,17 +38,12 @@ class ValidClass
 	{
 		$a = '1';
 
-		$b = function($a)
-		{
-			return (int) $a;
-		};
+		$b = fn($a) => (int) $a;
 	}
 
 
 	/**
 	 * Foo
-	 *
-	 * @todo Add bar
 	 */
 	public function validMethod(): int
 	{
@@ -79,7 +69,7 @@ class ValidClass
 	{
 		$sum = $someArgument + $anotherArgument;
 
-		if(is_null($anotherArgument))
+		if($anotherArgument === null)
 		{
 			$sum += 5;
 		}
@@ -103,11 +93,11 @@ class ValidClass
 		preg_match('/\w+([\/\(\)])/', $string);
 
 		$string .= '\ModulIS\Example\\';
-		$string .= "Object\Record";
+		$string .= 'Object\\Record';
 
 		echo "Metoda $string neexistuje";
 
-		throw new \Exception("Instance of 'ModulIS\Record' expected, '" . $string . "' given .");
+		throw new \Exception("Instance of 'ModulIS\\Record' expected, '" . $string . "' given .");
 	}
 
 
