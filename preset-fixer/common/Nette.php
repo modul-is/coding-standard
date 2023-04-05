@@ -12,9 +12,9 @@ return [
 	'blank_line_between_import_groups' => false,
 
 	// braces split
-	'braces' => false,
+	// 'braces' => false,
 	// Ensures a single space after language constructs
-	'single_space_after_construct' => false,
+	'single_space_around_construct' => false,
 	// The body of each control structure MUST be enclosed within braces
 	'control_structure_braces' => true,
 	// Control structure continuation keyword must be on the configured line
@@ -28,7 +28,13 @@ return [
 	// overriden rules
 
 	// Curly braces must be placed as configured
-	'Nette/curly_braces_position' => false,
+	'Nette/curly_braces_position' => [
+		'control_structures_opening_brace' => 'next_line_unless_newline_at_signature_end',
+		'functions_opening_brace' => 'next_line_unless_newline_at_signature_end',
+		'anonymous_functions_opening_brace' => 'next_line_unless_newline_at_signature_end',
+		'classes_opening_brace' => 'next_line_unless_newline_at_signature_end',
+		'anonymous_classes_opening_brace' => 'next_line_unless_newline_at_signature_end'
+	],
 
 	// Each statement must be indented
 	'Nette/statement_indentation' => false,
