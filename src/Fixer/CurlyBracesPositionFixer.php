@@ -264,7 +264,7 @@ $bar = function () { $result = true;
 						$tokens[$previousTokenIndex]->isWhitespace()
 						&& 1 === Preg::match('/\R/', $tokens[$previousTokenIndex]->getContent())
 					) {
-						$whitespace = ' ';
+						// $whitespace = ' ';
 					}
 				}
 			}
