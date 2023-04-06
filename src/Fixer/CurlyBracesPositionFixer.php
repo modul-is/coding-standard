@@ -246,7 +246,9 @@ $bar = function () { $result = true;
 			}
 
 			$whitespace = ' ';
-			if (self::NEXT_LINE_UNLESS_NEWLINE_AT_SIGNATURE_END === $this->configuration[$positionOption]) {
+			$emptyAnonymousFunction = $positionOption === 'anonymous_functions_opening_brace' && $tokens[$tokens->getNextMeaningfulToken($openBraceIndex)]->equals('}');
+
+			if (self::NEXT_LINE_UNLESS_NEWLINE_AT_SIGNATURE_END === $this->configuration[$positionOption] && !$emptyAnonymousFunction) {
 				$whitespace = $this->whitespacesConfig->getLineEnding().$this->getLineIndentation($tokens, $index);
 
 				$colon = false;

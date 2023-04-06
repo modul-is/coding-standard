@@ -28,6 +28,7 @@ return [
 	// overriden rules
 
 	// Curly braces must be placed as configured
+	'curly_braces_position' => false,
 	'Nette/curly_braces_position' => [
 		'control_structures_opening_brace' => 'next_line_unless_newline_at_signature_end',
 		'functions_opening_brace' => 'next_line_unless_newline_at_signature_end',
