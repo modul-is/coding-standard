@@ -108,4 +108,10 @@ class ValidClass
 			echo 'bla';
 		}
 	}
+
+
+	private function callbackMethod($form)
+	{
+		$form->onSuccess[] = function() {};
+	}
 }
