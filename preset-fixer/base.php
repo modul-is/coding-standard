@@ -19,7 +19,8 @@ $config->registerCustomFixers([
 	new ModulIS\Fixer\ClassNotation\Php8EntityPropertyFixer,
 	new ModulIS\Fixer\ClassNotation\EntityReadonlyFixer,
 	new ModulIS\Fixer\ReturnNotation\FactoryReturnTypeFixer,
-	new ModulIS\Fixer\ClassNotation\Php8ConstructorFixer
+	new ModulIS\Fixer\ClassNotation\Php8ConstructorFixer,
+	new ModulIS\Fixer\Basic\NamedArgumentSpaceFixer
 ]);
 $config->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers);
 $config->setUsingCache(false);
