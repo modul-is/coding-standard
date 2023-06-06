@@ -54,16 +54,27 @@ $this->method(argument:1);
 	{
 		$content = $tokens->generateCode();
 
-		$newContent = Preg::replace('/(\w+:)(\w+)/', '$1 $2', $content);
+		Preg::matchAll('/([\'\"]?)([\w -]*)(\w+:)([\w\.\'\"]+)/', $content, $matches, PREG_SET_ORDER);
 
-		$newTokens = Tokens::fromCode($newContent);
-
-		foreach($newTokens as $index => $token)
+		foreach($matches as $match)
 		{
-			$newTokens[$index] = new Token($token->getContent());
+			if(isset($match[1], $match[2], $match[3], $match[4]) && !$match[1])
+			{
+				$newContent = str_replace($match[0], $match[2] . $match[3] . ' ' . $match[4], $content);
+			}
 		}
 
-		$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+		if(isset($newContent))
+		{
+			$newTokens = Tokens::fromCode($newContent);
+
+			foreach($newTokens as $index => $token)
+			{
+				$newTokens[$index] = new Token($token->getContent());
+			}
+
+			$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+		}
 	}
 
 

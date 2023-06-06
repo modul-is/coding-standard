@@ -83,6 +83,7 @@ class ValidClass
 		$a = $one ? $two : $three;
 		$b = $one ?: $two;
 		$c = $a ?? $b;
+		$d = (new \DateTime)->format('Y-m-d H:i:s');
 
 		return $c;
 	}
