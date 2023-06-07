@@ -54,7 +54,7 @@ $this->method(argument:1);
 	{
 		$content = $tokens->generateCode();
 
-		Preg::matchAll('/([\'\"]?)([\w -]*)(\w+:)([\w\.\'\"]+)/', $content, $matches, PREG_SET_ORDER);
+		Preg::matchAll('/([\'\"]?)((?<=[\'\"])[\S ]*)(\w+:)([\w\.\'\"]+)/', $content, $matches, PREG_SET_ORDER);
 
 		foreach($matches as $match)
 		{
