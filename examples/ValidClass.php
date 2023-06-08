@@ -104,7 +104,7 @@ class ValidClass
 
 	private function internalMethod()
 	{
-		foreach($this->anotherMethod(1, anotherArgument: 2) as $key => $value)
+		foreach($this->anotherMethod(1, 2) as $key => $value)
 		{
 			echo 'bla';
 		}

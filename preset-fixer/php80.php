@@ -19,10 +19,7 @@ $rules = [
 	'ModulIS/entity_readonly' => true,
 
 	// Convert constructors to PHP8
-	'ModulIS/php8_constructor' => true,
-
-	// Force spaces after named parameters
-	'ModulIS/named_argument_space' => true
+	'ModulIS/php8_constructor' => true
 ];
 
 $config->setRules($rules + $config->getRules());
