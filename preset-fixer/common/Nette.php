@@ -222,6 +222,7 @@ return [
 	// Remove dumps and die
 	'ModulIS/dump' => true,
 
-	// Remove dumps and die
-	'ModulIS/factory_return_type' => true
+	'ModulIS/factory_return_type' => true,
+
+	'ModulIS/const_indent' => true
 ];
