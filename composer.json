@@ -14,5 +14,10 @@
 	"autoload": {
 		"classmap": ["src/"]
 	},
-	"bin": ["ecs"]
+	"bin": ["ecs"],
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
 }
