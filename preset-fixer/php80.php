@@ -19,7 +19,10 @@ $rules = [
 	'ModulIS/entity_readonly' => true,
 
 	// Convert constructors to PHP8
-	'ModulIS/php8_constructor' => true
+	'ModulIS/php8_constructor' => true,
+
+	// Convert constructors to PHP8
+	'ModulIS/parameters_no_trailing_comma' => true
 ];
 
 $config->setRules($rules + $config->getRules());
