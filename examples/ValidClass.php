@@ -15,6 +15,8 @@ class ValidClass
 
 	private const DREAM_COUNT = 250;
 
+	private const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36';
+
 	protected $listOfSkills = [
 		'empathy',
 		'respect'
@@ -43,6 +45,12 @@ class ValidClass
 		$a = '1';
 
 		$b = fn($a) => (int) $a;
+
+		$c = 123456;
+
+		$d = 1_234_567_890;
+
+		$e = 1_234_567.123;
 	}
 
 

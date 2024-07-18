@@ -184,5 +184,4 @@ class RequireMultiLineConditionSniff extends \SlevomatCodingStandard\Sniffs\Cont
 			? $conditionLinesCount < $booleanOperatorPointersCount + 1
 			: false;
 	}
-
 }

@@ -9,10 +9,5 @@
 	<rule ref="SlevomatCodingStandard.Functions.RequireArrowFunction"/>
 
 	<!-- Requires use of numeric literal separators. -->
-	<rule ref="SlevomatCodingStandard.Numbers.RequireNumericLiteralSeparator">
-		<properties>
-			<property name="minDigitsBeforeDecimalPoint" value="7"/>
-			<property name="minDigitsAfterDecimalPoint" value="20"/>
-		</properties>
-	</rule>
+	<rule ref="../src/Sniffs/RequireNumericLiteralSeparatorSniff.php"/>
 </ruleset>
