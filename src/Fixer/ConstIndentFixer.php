@@ -65,7 +65,7 @@ C = 3;
 		{
 			$const = $match[1];
 
-			if(isset($const) && !str_contains($const, '[') && !str_contains($const, '//') && !str_contains($const, '/*'))
+			if(isset($const) && !str_contains($const, '[') && !str_contains($const, '//') && !str_contains($const, '/*') && substr_count($const, "'") % 2 === 0)
 			{
 				$regex = '/(?:public|protected|private) const' . $const . '((\s+)([\S ]+[,;]))/';
 
