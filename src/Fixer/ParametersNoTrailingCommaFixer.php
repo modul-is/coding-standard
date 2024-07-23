@@ -59,7 +59,7 @@ public function __construct
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(,)(\s*\))/';
+		$string = '/(?:public|protected|private) (?:static )?function [^)]+(,)(\s*\))/';
 
 		Preg::matchAll($string, $content, $matches, PREG_SET_ORDER);
 
