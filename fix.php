@@ -30,6 +30,7 @@ set_time_limit(0);
 $paths = [];
 $preset = null;
 $dry = true;
+$phpPath = null;
 
 for ($i = 1; $i < count($argv); $i++) {
 	$arg = $argv[$i];
@@ -37,6 +38,8 @@ for ($i = 1; $i < count($argv); $i++) {
 		$preset = $argv[++$i];
 	} elseif ($arg === '--fix' || $arg === 'fix') {
 		$dry = false;
+	} elseif ($arg === '--phpPath') {
+		$phpPath = $argv[++$i];
 	} elseif ($arg === 'check') {
 		// ignore
 	} else {
@@ -88,10 +91,10 @@ $finder = PhpCsFixer\Finder::create()
 $fileList = __DIR__ . '/filelist.tmp';
 file_put_contents($fileList, implode("\n", iterator_to_array($finder)));
 
-
 // PHP CS Fixer
 passthru(
-	'php ' . escapeshellarg($vendorDir . '/friendsofphp/php-cs-fixer/php-cs-fixer')
+	($phpPath === null ? 'php' : $phpPath) . ' '
+    . escapeshellarg($vendorDir . '/friendsofphp/php-cs-fixer/php-cs-fixer')
 	. ' fix -v --diff'
 	. ($dry ? ' --dry-run' : '')
 	. ' --config ' . escapeshellarg(__DIR__ . "/preset-fixer/$preset.php"),
@@ -110,7 +113,8 @@ if (substr($preset, 0, 3) === 'php' && is_file($presetFile = "$root/ncs.xml")) {
 }
 
 passthru(
-	'php ' . escapeshellarg($vendorDir . '/squizlabs/php_codesniffer/bin/' . ($dry ? 'phpcs' : 'phpcbf'))
+    ($phpPath === null ? 'php' : $phpPath) . ' '
+    . escapeshellarg($vendorDir . '/squizlabs/php_codesniffer/bin/' . ($dry ? 'phpcs' : 'phpcbf'))
 	. ' -s' // show sniff codes, works only in dry mode :-(
 	. ' -p' // progress
 	. (preg_match('~php(\d)(\d)~', $preset, $m) ? " --runtime-set php_version $m[1]0$m[2]00" : '')
