@@ -59,15 +59,15 @@ public function __construct
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(,)(\s*\))/';
+		$string = '/((?:public|protected|private) (?:static )?function [^)]+)(,)(\s*\))/';
 
 		Preg::matchAll($string, $content, $matches, PREG_SET_ORDER);
 
 		foreach($matches as $match)
 		{
-			if(!empty($match[1]) && !empty($match[2]))
+			if(!empty($match[2]) && !empty($match[3]))
 			{
-				$newContent = preg_replace($string, $match[2], $content);
+				$newContent = preg_replace($string, $match[1] . $match[3], $content);
 
 				$newTokens = Tokens::fromCode($newContent);
 
