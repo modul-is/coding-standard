@@ -76,6 +76,10 @@ if ($a)
 
 		$newContent = preg_replace($string, '$1$2', $content);
 
+		$string = '/([\t ]*)(}) (elseif|else)/';
+
+		$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$3', $newContent);
+
 		$newTokens = Tokens::fromCode($newContent);
 
 		foreach($newTokens as $index => $token)
