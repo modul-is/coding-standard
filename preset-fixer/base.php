@@ -21,7 +21,8 @@ $config->registerCustomFixers([
 	new ModulIS\Fixer\ReturnNotation\FactoryReturnTypeFixer,
 	new ModulIS\Fixer\ClassNotation\Php8ConstructorFixer,
 	new ModulIS\Fixer\ClassNotation\ConstIndentFixer,
-	new ModulIS\Fixer\ClassNotation\ParametersNoTrailingCommaFixer
+	new ModulIS\Fixer\ClassNotation\ParametersNoTrailingCommaFixer,
+	new ModulIS\Fixer\Whitespace\LoopWhitespaceFixer
 ]);
 $config->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers);
 $config->setUsingCache(false);

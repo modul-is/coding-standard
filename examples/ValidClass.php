@@ -85,6 +85,10 @@ class ValidClass
 		{
 			$sum += 5;
 		}
+		elseif($sum)
+		{
+			$sum -= 5;
+		}
 
 		return (array) $sum;
 	}

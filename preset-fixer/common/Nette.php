@@ -224,5 +224,7 @@ return [
 
 	'ModulIS/factory_return_type' => true,
 
-	'ModulIS/const_indent' => true
+	'ModulIS/const_indent' => true,
+
+	'ModulIS/loop_whitespace' => true
 ];
