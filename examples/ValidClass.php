@@ -84,6 +84,9 @@ class ValidClass
 		if($anotherArgument === null)
 		{
 			$sum += 5;
+		} elseif($sum)
+		{
+
 		}
 
 		return (array) $sum;
