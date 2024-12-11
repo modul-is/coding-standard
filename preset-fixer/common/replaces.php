@@ -18,7 +18,7 @@ return [
 	'is_null' => true,
 
 	// The configured functions must be commented out
-	PhpCsFixerCustomFixers\Fixer\CommentedOutFunctionFixer::name() => [],
+	PhpCsFixerCustomFixers\Fixer\CommentedOutFunctionFixer::name() => true,
 
 	// Classes defined internally by extension or core must be referenced with the correct case
 	'class_reference_name_casing' => true,

@@ -49,7 +49,7 @@ for ($i = 1; $i < count($argv); $i++) {
 
 
 // try to find out the PHP version from the composer.json
-$presetVersions = ['8.1', '8.0', '7.4', '7.3', '7.1'];
+$presetVersions = ['8.3', '8.2', '8.1', '8.0', '7.4', '7.3', '7.1'];
 
 
 $root = getcwd();
@@ -77,6 +77,7 @@ $finder = PhpCsFixer\Finder::create()
 	->name(['*.php', '*.phpt'])
 	->notPath([
 		'/fixtures.*/',
+		'expected',
 		'temp',
 		'tmp',
 		'vendor',
@@ -93,9 +94,8 @@ file_put_contents($fileList, implode("\n", iterator_to_array($finder)));
 
 // PHP CS Fixer
 passthru(
-	($phpPath === null ? 'php' : $phpPath) . ' '
-    . escapeshellarg($vendorDir . '/friendsofphp/php-cs-fixer/php-cs-fixer')
-	. ' fix -v --diff'
+	PHP_BINARY . ' ' . escapeshellarg($vendorDir . '/friendsofphp/php-cs-fixer/php-cs-fixer')
+	. ' fix -v'
 	. ($dry ? ' --dry-run' : '')
 	. ' --config ' . escapeshellarg(__DIR__ . "/preset-fixer/$preset.php"),
 	$code
@@ -113,13 +113,13 @@ if (substr($preset, 0, 3) === 'php' && is_file($presetFile = "$root/ncs.xml")) {
 }
 
 passthru(
-    ($phpPath === null ? 'php' : $phpPath) . ' '
-    . escapeshellarg($vendorDir . '/squizlabs/php_codesniffer/bin/' . ($dry ? 'phpcs' : 'phpcbf'))
+	PHP_BINARY . ' ' . escapeshellarg($vendorDir . '/squizlabs/php_codesniffer/bin/' . ($dry ? 'phpcs' : 'phpcbf'))
 	. ' -s' // show sniff codes, works only in dry mode :-(
 	. ' -p' // progress
 	. (preg_match('~php(\d)(\d)~', $preset, $m) ? " --runtime-set php_version $m[1]0$m[2]00" : '')
 	. ' --colors'
 	. ' --extensions=php,phpt'
+	. ' --runtime-set ignore_warnings_on_exit true'
 	. ' --no-cache'
 	. ' --standard=' . escapeshellarg($presetFile)
 	. ' --file-list=' . escapeshellarg($fileList),

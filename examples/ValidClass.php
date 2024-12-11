@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Nette\CodingStandard\Examples;
 
@@ -101,7 +101,7 @@ class ValidClass
 		$c = $a ?? $b;
 		$d = (new \DateTime)->format('Y-m-d H:i:s');
 
-		return $c;
+		return $c . $d;
 	}
 
 
@@ -110,7 +110,7 @@ class ValidClass
 		preg_match('/\w+([\/\(\)])/', $string);
 
 		$string .= '\ModulIS\Example\\';
-		$string .= 'Object\\Record';
+		$string .= 'Object\Record';
 
 		echo "Metoda $string neexistuje";
 

@@ -5,11 +5,12 @@ declare(strict_types=1);
 return [
 	'@PSR12' => true,
 	'@PSR12:risky' => true,
-	'new_with_braces' => false, // new stdClass
+	'new_with_parentheses' => false, // new stdClass
 	'single_line_after_imports' => false, // Nette uses two empty lines
 	'blank_line_after_namespace' => false,
 	'ordered_imports' => true, // Use statements are alphabetically ordered
 	'blank_line_between_import_groups' => false,
+	'declare_equal_normalize' => false,
 
 	// braces split
 	// 'braces' => false,
@@ -28,21 +29,16 @@ return [
 	// overriden rules
 
 	// Curly braces must be placed as configured
-	'curly_braces_position' => false,
-	'Nette/curly_braces_position' => [
-		'control_structures_opening_brace' => 'next_line_unless_newline_at_signature_end',
-		'functions_opening_brace' => 'next_line_unless_newline_at_signature_end',
-		'anonymous_functions_opening_brace' => 'next_line_unless_newline_at_signature_end',
-		'classes_opening_brace' => 'next_line_unless_newline_at_signature_end',
-		'anonymous_classes_opening_brace' => 'next_line_unless_newline_at_signature_end'
-	],
+	'braces_position' => false,
+	'Nette/curly_braces_position' => false,
 
 	// Each statement must be indented
+	'statement_indentation' => false,
 	'Nette/statement_indentation' => false,
 
 	// In the argument list, there must be one space after each comma, and there must no be a space before each comma
 	'method_argument_space' => false,
-	'Nette/method_argument_space' => [],
+	'Nette/method_argument_space' => true,
 
 	// Spaces should be properly placed in a function declaration.
 	'function_declaration' => false,
@@ -61,7 +57,7 @@ return [
 	'space_after_semicolon' => true,
 
 	// Binary operators should be surrounded by at least one space.
-	//'binary_operator_spaces' => true,
+	'binary_operator_spaces' => ['operators' => ['|' => 'no_space']],
 
 	// Unary operators should be placed adjacent to their operands.
 	'unary_operator_spaces' => true,
@@ -113,7 +109,7 @@ return [
 	// Remove useless semicolon statements
 	'no_empty_statement' => true,
 
-	'no_unneeded_curly_braces' => true,
+	'no_unneeded_braces' => true,
 
 	// Remove trailing commas in list() calls.
 	'no_trailing_comma_in_singleline' => true,
@@ -172,7 +168,7 @@ return [
 	// Convert double quotes to single quotes for simple strings.
 	'single_quote' => true,
 
-	'escape_implicit_backslashes' => true,
+	'string_implicit_backslashes' => true,
 
 	// Convert ${..} to {$..}
 	'simple_to_complex_string_variable' => true,
