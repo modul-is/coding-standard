@@ -43,5 +43,6 @@ if (is_file($file = "$root/ncs.php")) {
 }
 
 $config->setRules([]);
+$config->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect());
 
 return $config;

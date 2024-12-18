@@ -58,11 +58,14 @@ final class CurlyBracesPositionFixer extends AbstractFixer implements Configurab
 					'<?php
 class Foo {
 }
+
 function foo() {
 }
+
 $foo = function()
 {
 };
+
 if (foo())
 {
     bar();
@@ -246,9 +249,7 @@ $bar = function () { $result = true;
 			}
 
 			$whitespace = ' ';
-			$emptyAnonymousFunction = $positionOption === 'anonymous_functions_opening_brace' && $tokens[$tokens->getNextMeaningfulToken($openBraceIndex)]->equals('}');
-
-			if (self::NEXT_LINE_UNLESS_NEWLINE_AT_SIGNATURE_END === $this->configuration[$positionOption] && !$emptyAnonymousFunction) {
+			if (self::NEXT_LINE_UNLESS_NEWLINE_AT_SIGNATURE_END === $this->configuration[$positionOption]) {
 				$whitespace = $this->whitespacesConfig->getLineEnding().$this->getLineIndentation($tokens, $index);
 
 				$colon = false;
@@ -266,7 +267,7 @@ $bar = function () { $result = true;
 						$tokens[$previousTokenIndex]->isWhitespace()
 						&& 1 === Preg::match('/\R/', $tokens[$previousTokenIndex]->getContent())
 					) {
-						// $whitespace = ' ';
+						$whitespace = ' ';
 					}
 				}
 			}
