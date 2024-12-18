@@ -4,7 +4,7 @@
 	"require": {
 		"php": "^7.4 || ^8.0",
 		"slevomat/coding-standard": "^8.6",
-		"friendsofphp/php-cs-fixer": "^3.10 <=3.59.2",
+		"friendsofphp/php-cs-fixer": "^3.57 <=3.59.2",
 		"squizlabs/php_codesniffer": "^3.6",
 		"kubawerlos/php-cs-fixer-custom-fixers": "^3.5"
 	},
