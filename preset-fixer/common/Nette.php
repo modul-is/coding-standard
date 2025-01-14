@@ -57,7 +57,7 @@ return [
 	'space_after_semicolon' => true,
 
 	// Binary operators should be surrounded by at least one space.
-	'binary_operator_spaces' => ['operators' => ['|' => 'no_space', '%' => null]],
+	'binary_operator_spaces' => ['operators' => ['|' => 'no_space', '%' => null, '/' => null]],
 
 	// Unary operators should be placed adjacent to their operands.
 	'unary_operator_spaces' => true,
