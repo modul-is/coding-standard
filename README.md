@@ -8,16 +8,16 @@ This is a set of [sniffs](https://github.com/squizlabs/PHP_CodeSniffer) and [fix
 
 #### Check PHP files
 
-Check coding standard for PHP 8.2 in directory `src`:
+Check coding standard for PHP 8.4 in directory `src`:
 
 ```bash
-php ecs check src --preset php82
+php ecs check src --preset php84
 ```
 
 And fix it:
 
 ```bash
-php ecs check src --preset php82 --fix
+php ecs check src --preset php84 --fix
 ```
 
 If no PHP version is specified, it will try to detect it automatically from the `composer.json` file.
