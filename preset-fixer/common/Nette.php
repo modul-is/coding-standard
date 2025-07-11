@@ -30,7 +30,6 @@ return [
 
 	// Curly braces must be placed as configured
 	'braces_position' => false,
-	'Nette/curly_braces_position' => false,
 
 	// Each statement must be indented
 	'statement_indentation' => false,
@@ -210,7 +209,7 @@ return [
 	'no_null_property_initialization' => true,
 
 	// Constructor having promoted properties must have them in separate lines
-	PhpCsFixerCustomFixers\Fixer\MultilinePromotedPropertiesFixer::name() => true,
+	'multiline_promoted_properties' => true,
 
 
 	// Other
