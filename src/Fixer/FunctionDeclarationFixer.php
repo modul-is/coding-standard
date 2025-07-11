@@ -47,6 +47,8 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
 
 	private $singleLineWhitespaceOptions = " \t";
 
+	protected $configuration = [];
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -170,10 +172,17 @@ $f = function () {};
 		}
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
+	public function configure(array $configuration): void
+	{
+		$this->configuration = $configuration;
+
+		if(!array_key_exists('closure_function_spacing', $configuration))
+		{
+			$this->configuration['closure_function_spacing'] = self::SPACING_NONE;
+		}
+	}
+
+	public function getConfigurationDefinition(): FixerConfigurationResolverInterface
 	{
 		return new FixerConfigurationResolver([
 			(new FixerOptionBuilder('closure_function_spacing', 'Spacing to use before open parenthesis for closures.'))

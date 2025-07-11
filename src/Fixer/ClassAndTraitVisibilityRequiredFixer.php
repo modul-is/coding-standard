@@ -7,17 +7,9 @@ namespace NetteCodingStandard\Fixer\ClassNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
-use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
-use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
-use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerDefinition\CodeSample;
-use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Tokenizer\CT;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
-use PhpCsFixer\Tokenizer\TokensAnalyzer;
 use ReflectionMethod;
 use SplFileInfo;
 
@@ -46,10 +38,21 @@ final class ClassAndTraitVisibilityRequiredFixer extends AbstractFixer implement
 	}
 
 
-	public function configure(array $configuration = null): void
+	public function getPriority(): int
 	{
-		$this->configuration = $configuration;
+		return $this->visibilityRequiredFixer->getPriority();
+	}
+
+
+	public function configure(array $configuration): void
+	{
 		$this->visibilityRequiredFixer->configure($configuration);
+	}
+
+
+	public function getConfigurationDefinition(): FixerConfigurationResolverInterface
+	{
+		return $this->visibilityRequiredFixer->getConfigurationDefinition();
 	}
 
 
@@ -57,7 +60,7 @@ final class ClassAndTraitVisibilityRequiredFixer extends AbstractFixer implement
 	{
 		/**
 		 * Hack note: This reflection opening was chosen as more future-proof
-		 * than duplicating whole 300-lines class. As "VisibilityRequiredFixer" class is final
+		 * than duplicating whole 300-lines class. As the "VisibilityRequiredFixer" class is final
 		 * and "applyFix()" is final, there is no other way round it.
 		 */
 		$method = new ReflectionMethod($this->visibilityRequiredFixer, 'applyFix');
@@ -66,8 +69,8 @@ final class ClassAndTraitVisibilityRequiredFixer extends AbstractFixer implement
 	}
 
 
-    public function getName(): string
-    {
-        return 'Nette/' . parent::getName();
-    }
+	public function getName(): string
+	{
+		return 'Nette/' . parent::getName();
+	}
 }
