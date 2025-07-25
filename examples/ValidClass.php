@@ -51,6 +51,13 @@ class ValidClass
 		$d = 1_234_567_890;
 
 		$e = 1_234_567.123;
+
+		$f = $a === '' ? null : (str_starts_with($a, '+420') ? substr($a, 4) : $a);
+
+		if ($c >= $d || ($c !== null && $e <= $d))
+		{
+			$g = $d + $e;
+		}
 	}
 
 
@@ -109,10 +116,11 @@ class ValidClass
 	{
 		preg_match('/\w+([\/\(\)])/', $string);
 
-		$string .= '\ModulIS\Example\\';
-		$string .= 'Object\Record';
+		$class = '\ModulIS\Example\\';
+		$class .= 'Object\Record';
+		$method = 'get' . ucfirst($string);
 
-		echo "Metoda $string neexistuje";
+		echo 'Metoda ' . $class . '::' . $method . ' neexistuje';
 
 		throw new \Exception("Instance of 'ModulIS\\Record' expected, '" . $string . "' given .");
 	}

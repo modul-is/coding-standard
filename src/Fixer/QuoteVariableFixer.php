@@ -56,24 +56,11 @@ $a = "Metoda $string neexistuje";
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/"([^\';]*)(\$[\w]+)([^\';]*)"/';
-
-		if(preg_match($string, $content, $matches))
-		{
-			$newContent = preg_replace($string, '"$1\' . $2 . \'$3"', $content);
-
-			while(preg_match($string, $newContent, $matches))
-			{
-				$newContent = preg_replace($string, '"$1\' . $2 . \'$3"', $newContent);
-			}
-
-			$a = str_replace('"', '\'', $matches[0]);
-			$newContent = str_replace($matches[0], $a, $newContent);
-		}
+		$newContent = $this->convertInterpolatedString($content);
 /*$f=fopen('bs.txt', 'a+');
 fwrite($f, $newContent);
 fclose($f);*/
-		$newTokens = Tokens::fromCode($newContent ?? $content);
+		$newTokens = Tokens::fromCode($newContent);
 
 		foreach($newTokens as $index => $token)
 		{
@@ -81,6 +68,33 @@ fclose($f);*/
 		}
 
 		$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+	}
+
+
+	private function convertInterpolatedString(string $content): string
+	{
+		$newContent = preg_replace_callback('/"((?:[^"\'\.]*\$[\w]+[^"\'\.]*)+)"/', function($matches)
+		{
+			preg_match_all('/(\$[\w]+)|([^\$]+)/', $matches[1], $parts);
+
+			$segments = [];
+
+			foreach($parts[0] as $piece)
+			{
+				if(preg_match('/^\$[\w]+$/', $piece))
+				{
+					$segments[] = $piece;
+				}
+				else
+				{
+					$segments[] = "'" . $piece . "'";
+				}
+			}
+
+			return implode(' . ', $segments);
+		}, $content);
+
+		return $newContent;
 	}
 
 

@@ -61,7 +61,7 @@ class Checker
 
 		passthru(
 			PHP_BINARY . ' ' . escapeshellarg($fixerBin)
-			. ' fix -v'
+			. ' fix -v --diff'
 			. ($this->dryRun ? ' --dry-run' : '')
 			. ' --config=' . escapeshellarg($presetFile),
 			$exitCode,
