@@ -27,6 +27,26 @@ class ValidClass
 		'Latte'
 	];
 
+	private ?string $phone = null
+	{
+		set(?string $value) => $value === '' ? null : (str_starts_with($value, '+420') ? substr($value, 4) : $value);
+	}
+
+	private ?string $datePay = null
+	{
+		set(?string $value) => $value ? new \DateTime($value)->format('Y-m-d') : $value;
+	}
+
+	private string $date
+	{
+		get {
+			$date = new \DateTime($this->date);
+
+			return $date->format('Y-m-d H:i:s');
+		}
+		set(string $value) => new \DateTime($value)->format('Y-m-d H:i:s');
+	}
+
 
 	public function __construct
 	(
