@@ -221,5 +221,7 @@ return [
 
 	'ModulIS/const_indent' => true,
 
-	'ModulIS/loop_whitespace' => true
+	'ModulIS/loop_whitespace' => true,
+
+	'ModulIS/quote_variable' => true
 ];
