@@ -44,13 +44,12 @@ https://github.com/slevomat/coding-standard
 	<rule ref="SlevomatCodingStandard.Classes.PropertyDeclaration"/>
 
 	<!-- This sniff checks that there are two blank lines between functions declarations and single between signatures. -->
-	<rule ref="../src/Sniffs/FunctionSpacingSniff.php">
-	<!-- is ignored...
+	<!--<rule ref="../src/Sniffs/FunctionSpacingSniff.php">
 		<properties>
 			<property name="spacingBeforeFirst" value="0"/>
 			<property name="spacingAfterLast" value="0"/>
-		</properties> -->
-	</rule>
+		</properties>
+	</rule>-->
 
 	<!-- Checks that there's a single space between a typehint and a parameter name and no whitespace between a nullability symbol and a typehint -->
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
@@ -128,7 +127,7 @@ https://github.com/slevomat/coding-standard
 	<rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
 
 	<!-- Disallows multi property definition. -->
-	<rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>
+	<!--<rule ref="SlevomatCodingStandard.Classes.DisallowMultiPropertyDefinition"/>-->
 
 
 	<!-- MISC -->
@@ -177,11 +176,11 @@ https://github.com/slevomat/coding-standard
 	<rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
 		<exclude name="Squiz.WhiteSpace.ObjectOperatorSpacing.Before"/>
 	</rule>
-	<rule ref="Squiz.WhiteSpace.OperatorSpacing">
+	<!--<rule ref="Squiz.WhiteSpace.OperatorSpacing">
 		<properties>
 			<property name="ignoreNewlines" value="true"/>
 		</properties>
-	</rule>
+	</rule>-->
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
 		<properties>
