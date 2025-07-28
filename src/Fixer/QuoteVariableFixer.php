@@ -57,9 +57,7 @@ $a = "Metoda $string neexistuje";
 		$content = $tokens->generateCode();
 
 		$newContent = $this->convertInterpolatedString($content);
-/*$f=fopen('bs.txt', 'a+');
-fwrite($f, $newContent);
-fclose($f);*/
+
 		$newTokens = Tokens::fromCode($newContent);
 
 		foreach($newTokens as $index => $token)
@@ -94,7 +92,7 @@ fclose($f);*/
 			return implode(' . ', $segments);
 		}, $content);
 
-		return $newContent;
+		return $newContent ?: $content;
 	}
 
 
