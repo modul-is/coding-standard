@@ -74,7 +74,7 @@ class ValidClass
 
 		$f = $a === '' ? null : (str_starts_with($a, '+420') ? substr($a, 4) : $a);
 
-		if ($c >= $d || ($c !== null && $e <= $d))
+		if($c >= $d || ($c !== null && $e <= $d))
 		{
 			$g = $d + $e;
 		}
