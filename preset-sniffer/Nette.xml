@@ -52,7 +52,7 @@ https://github.com/slevomat/coding-standard
 	</rule>-->
 
 	<!-- Checks that there's a single space between a typehint and a parameter name and no whitespace between a nullability symbol and a typehint -->
-	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+	<!--<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>-->
 	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 
 	<!-- Arrow functions formatting -->
