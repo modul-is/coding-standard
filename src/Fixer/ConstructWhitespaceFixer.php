@@ -8,10 +8,11 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
+use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
-final class LoopWhitespaceFixer extends AbstractFixer
+final class ConstructWhitespaceFixer extends AbstractFixer
 {
 	/**
 	 * {@inheritdoc}
@@ -19,31 +20,20 @@ final class LoopWhitespaceFixer extends AbstractFixer
 	public function getDefinition(): FixerDefinitionInterface
 	{
 		return new FixerDefinition(
-			'There must be correct whitespace in loops and conditions.',
+			'There must be correct whitespace in constructors.',
 			[
 				[
 					new CodeSample('<?php
-foreach ($array as $a)
-{
-	echo $a;
+public function __construct(
+	public string $a,
+){
+	$this->a = $a;
 }
-'
-					),
-					new CodeSample('<?php
-if ($a)
-{
-	return $a;
-} elseif ($b)
-{
-	return $b;
-}
-'
-					)
+'					)
 				]
 			]
 		);
 	}
-
 
 	/**
 	 * {@inheritdoc}
@@ -55,7 +45,6 @@ if ($a)
 		return -1;
 	}
 
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -64,7 +53,6 @@ if ($a)
 		return true;
 	}
 
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -72,22 +60,25 @@ if ($a)
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(while|foreach|for|switch|if|elseif|else)\s+(\()/';
+		$string = '/(\t*)(public function __construct)(\s*)(\()([^\)]*)(\))(\s*)({[^}]*})/';
 
-		$newContent = preg_replace($string, '$1$2', $content);
+		preg_match($string, $content, $matches);
 
-		$string = '/([\t ]*)(}) (elseif|else)/';
-
-		$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$3', $newContent);
-
-		$newTokens = Tokens::fromCode($newContent);
-
-		foreach($newTokens as $index => $token)
+		if(!empty($matches[2]) && !empty($matches[5]) && (!str_contains($matches[3], PHP_EOL) || !str_contains($matches[7], PHP_EOL)))
 		{
-			$newTokens[$index] = new Token($token->getContent());
-		}
+			$replace = $matches[1] . $matches[2] . PHP_EOL . $matches[1] . $matches[4] . $matches[5] . $matches[6] . PHP_EOL . $matches[1] . $matches[8];
 
-		$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+			$newContent = preg_replace($string, $replace, $content);
+
+			$newTokens = Tokens::fromCode($newContent);
+
+			foreach($newTokens as $index => $token)
+			{
+				$newTokens[$index] = new Token($token->getContent());
+			}
+
+			$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+		}
 	}
 
 

@@ -223,5 +223,7 @@ return [
 
 	'ModulIS/loop_whitespace' => true,
 
+	'ModulIS/construct_whitespace' => true,
+
 	'ModulIS/quote_variable' => true
 ];

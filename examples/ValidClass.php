@@ -48,13 +48,11 @@ class ValidClass
 	}
 
 
-	public function __construct
-	(
+	public function __construct(
 		public array $listOfEmotions,
 		array $listOfSkills,
 		array $listOfElements
-	)
-	{
+	){
 		$this->listOfSkills = $listOfSkills;
 		$this->listOfElements = $listOfElements;
 	}

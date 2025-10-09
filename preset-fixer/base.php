@@ -22,6 +22,7 @@ $config->registerCustomFixers([
 	new ModulIS\Fixer\ClassNotation\ConstIndentFixer,
 	new ModulIS\Fixer\ClassNotation\ParametersNoTrailingCommaFixer,
 	new ModulIS\Fixer\Whitespace\LoopWhitespaceFixer,
+	new ModulIS\Fixer\Whitespace\ConstructWhitespaceFixer,
 	new ModulIS\Fixer\Basic\QuoteVariableFixer
 ]);
 $config->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers);
