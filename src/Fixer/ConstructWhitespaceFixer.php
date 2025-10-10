@@ -8,7 +8,6 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -60,15 +59,13 @@ public function __construct(
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(\t*)(public function __construct)(\s*)(\()([^\)]*)(\))(\s*)({[^}]*})/';
+		$string = '/(\t+)(public function __construct)(\s*)(\()([^\)]*)(\))(\s*)({[^}]*})/';
 
 		preg_match($string, $content, $matches);
 
 		if(!empty($matches[2]) && !empty($matches[5]) && (!str_contains($matches[3], PHP_EOL) || !str_contains($matches[7], PHP_EOL)))
 		{
-			$replace = $matches[1] . $matches[2] . PHP_EOL . $matches[1] . $matches[4] . $matches[5] . $matches[6] . PHP_EOL . $matches[1] . $matches[8];
-
-			$newContent = preg_replace($string, $replace, $content);
+			$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4$5$6' . PHP_EOL . '$1$8', $content);
 
 			$newTokens = Tokens::fromCode($newContent);
 

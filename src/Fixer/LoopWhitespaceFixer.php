@@ -72,13 +72,18 @@ if ($a)
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(while|foreach|for|switch|if|elseif|else)\s+(\()/';
+		// Add newline after }
+		$newContent = preg_replace('/^([ \t]*)}\s*(?=(elseif|else)\b)/mu', '$1}' . PHP_EOL . '$1', $content);
 
-		$newContent = preg_replace($string, '$1$2', $content);
+		// Add newline before {
+		$newContent = preg_replace(
+			'~^([ \t]*)(if|elseif|else|for|foreach|while|switch)(\s*\((?>[^()]+|\([^()]*\))*\))?[ \t]*(?!\n)\{~mxu',
+			'$1$2$3' . PHP_EOL . '$1{',
+			$newContent
+		);
 
-		$string = '/([\t ]*)(}) (elseif|else)/';
-
-		$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$3', $newContent);
+		// Remove space before parentheses
+		$newContent = preg_replace('/\b(if|elseif|for|foreach|while|switch)\s+\(/u', '$1(', $newContent);
 
 		$newTokens = Tokens::fromCode($newContent);
 
