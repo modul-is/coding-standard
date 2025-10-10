@@ -59,13 +59,13 @@ public function __construct(
 	{
 		$content = $tokens->generateCode();
 
-		$string = '/(\t+)(public function __construct)(\s*)(\()([^\)]*)(\))(\s*)({[^}]*})/';
+		$string = '/(\t+)(public function __construct)(\s*)(\()\s*([^\)]*)\s*(\))(\s*)({[^}]*})/';
 
 		preg_match($string, $content, $matches);
 
 		if(!empty($matches[2]) && !empty($matches[5]) && (!str_contains($matches[3], PHP_EOL) || !str_contains($matches[7], PHP_EOL)))
 		{
-			$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4$5$6' . PHP_EOL . '$1$8', $content);
+			$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4' . PHP_EOL . "$1\t$5" . PHP_EOL . '$1$6' . PHP_EOL . '$1$8', $content);
 
 			$newTokens = Tokens::fromCode($newContent);
 
