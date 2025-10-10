@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace NetteCodingStandard\Fixer\Whitespace;
 
 use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\Fixer\Indentation;
+use PhpCsFixer\Fixer\IndentationTrait;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -28,7 +28,7 @@ use PhpCsFixer\Tokenizer\Tokens;
 
 final class StatementIndentationFixer extends AbstractFixer implements WhitespacesAwareFixerInterface
 {
-	use Indentation;
+	use IndentationTrait;
 
 	private AlternativeSyntaxAnalyzer $alternativeSyntaxAnalyzer;
 

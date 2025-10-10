@@ -43,7 +43,7 @@ return [
 	'function_declaration' => false,
 	'Nette/function_declaration' => true,
 
-	'visibility_required' => false,
+	'modifier_keywords' => false,
 	'Nette/class_and_trait_visibility_required' => true,
 
 

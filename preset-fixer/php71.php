@@ -9,8 +9,8 @@ foreach (glob(__DIR__ . '/common/*.php') as $file) {
 }
 
 $rules = [
-	'@PHP71Migration' => true,
-	'@PHP70Migration:risky' => true,
+	'@PHP7x1Migration' => true,
+	'@PHP7x0Migration:risky' => true,
 	'random_api_migration' => false,
 	'non_printable_character' => false, // not working properly
 ];

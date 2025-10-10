@@ -5,8 +5,8 @@ declare(strict_types=1);
 $config = require __DIR__ . '/php74.php';
 
 $rules = [
-	'@PHP80Migration' => true,
-	'@PHP80Migration:risky' => true,
+	'@PHP8x0Migration' => true,
+	'@PHP8x0Migration:risky' => true,
 	'void_return' => false,
 
 	// Convert class properties to PHP8
