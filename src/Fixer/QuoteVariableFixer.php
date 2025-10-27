@@ -73,13 +73,13 @@ $a = "Metoda $string neexistuje";
 	{
 		$newContent = preg_replace_callback('/"((?:[^"\'\.]*\$[\w]+[^"\'\.]*)+)"/', function($matches)
 		{
-			preg_match_all('/(\$[\w]+)|([^\$]+)/', $matches[1], $parts);
+			preg_match_all('/(\$[\w\->]+)|([^\$]+)/', $matches[1], $parts);
 
 			$segments = [];
 
 			foreach($parts[0] as $piece)
 			{
-				if(preg_match('/^\$[\w]+$/', $piece))
+				if(preg_match('/^\$[\w\->]+$/', $piece))
 				{
 					$segments[] = $piece;
 				}

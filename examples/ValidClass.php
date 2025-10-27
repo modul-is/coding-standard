@@ -140,7 +140,7 @@ class ValidClass
 		$class .= 'Object\Record';
 		$method = 'get' . ucfirst($string);
 
-		echo 'Metoda ' . $class . '::' . $method . ' neexistuje';
+		echo 'Metoda ' . $class . '::' . $class->method . ' neexistuje';
 
 		throw new \Exception("Instance of 'ModulIS\\Record' expected, '" . $string . "' given .");
 	}

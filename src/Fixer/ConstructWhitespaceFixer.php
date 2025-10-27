@@ -65,7 +65,14 @@ public function __construct(
 
 		if(!empty($matches[2]) && !empty($matches[6]) && (!str_contains($matches[3], PHP_EOL) || !str_contains($matches[5], PHP_EOL) || !str_contains($matches[8], PHP_EOL)))
 		{
-			$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4' . PHP_EOL . "$1\t$6$7" . PHP_EOL . '$1$9', $content);
+			if(str_ends_with($matches[6], "\t"))
+			{
+				$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4' . PHP_EOL . "$1\t$6$7" . PHP_EOL . '$1$9', $content);
+			}
+			else
+			{
+				$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4' . PHP_EOL . "$1\t$6" . PHP_EOL . '$1$7' . PHP_EOL . '$1$9', $content);
+			}
 
 			$newTokens = Tokens::fromCode($newContent);
 
