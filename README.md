@@ -2,7 +2,7 @@
 
 _Based on Nette Coding Standard_
 
-This is a set of [sniffs](https://github.com/squizlabs/PHP_CodeSniffer) and [fixers](https://github.com/FriendsOfPHP/PHP-CS-Fixer) that **checks and fixes** code of Nette Framework against [Coding Standard in Documentation](https://nette.org/en/coding-standard) with some extra Modul IS fixers and tweaks.
+This is a set of [sniffs](https://github.com/PHPCSStandards/PHP_CodeSniffer) and [fixers](https://github.com/FriendsOfPHP/PHP-CS-Fixer) that **checks and fixes** code of Nette Framework against [Coding Standard in Documentation](https://nette.org/en/coding-standard) with some extra Modul IS fixers and tweaks.
 
 ## How to use
 
