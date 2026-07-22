@@ -22,6 +22,10 @@ php ecs check src --preset php84 --fix
 
 If no PHP version is specified, it will try to detect it automatically from the `composer.json` file.
 
+#### Inline styles
+
+The checker also scans `.latte` and `.twig` templates for inline `style="..."` HTML attributes and reports them as an error. The `<style nonce="...">` element is allowed and left untouched. When running with `--fix`, the inline `style` attributes are automatically removed.
+
 #### Check SQL settings
 
 ```bash

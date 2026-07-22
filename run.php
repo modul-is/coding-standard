@@ -91,7 +91,9 @@ $checker->cleanup();
 
 fixSpaces($argv);
 
-if ($fixerOk && $snifferOk) {
+$inlineStylesOk = checkInlineStyles($argv);
+
+if ($fixerOk && $snifferOk && $inlineStylesOk) {
 	echo $dryRun ? "Code style checks passed.\n" : "Code style fixed successfully.\n";
 	exit(0);
 } else {
@@ -144,4 +146,61 @@ function fixSpaces(array $arguments)
 
 		print $files . PHP_EOL;
 	}
+}
+
+
+// Inline styles checker/fixer (Latte, Twig)
+// Finds inline "style" HTML attributes and reports them as an error.
+// With --fix the inline style attributes are removed.
+// The <style nonce="..."> element is allowed and left untouched.
+function checkInlineStyles(array $arguments): bool
+{
+	$files = '';
+	$count = 0;
+	$fix = in_array('--fix', $arguments, true);
+
+	// matches a style="..." or style='...' HTML attribute (not the <style> element)
+	$pattern = '~\s+style\s*=\s*("[^"]*"|\'[^\']*\')~i';
+
+	$finder = new \Symfony\Component\Finder\Finder;
+	$finder->files()->name(['*.latte', '*.twig'])->in($arguments[2]);
+
+	foreach($finder as $file)
+	{
+		$path = $file->getRealPath();
+
+		$content = file_get_contents($path);
+
+		if(preg_match($pattern, $content))
+		{
+			if($fix)
+			{
+				$content = preg_replace($pattern, '', $content);
+
+				file_put_contents($path, $content);
+			}
+
+			$files .= $path . PHP_EOL;
+			$count++;
+		}
+	}
+
+	if($count != 0)
+	{
+		print PHP_EOL;
+
+		if($fix)
+		{
+			print "Inline styles removed from files:" . PHP_EOL;
+		}
+		else
+		{
+			print "Inline styles found in files:" . PHP_EOL;
+		}
+
+		print $files . PHP_EOL;
+	}
+
+	// in fix mode the styles were removed, so the result is OK
+	return $fix || $count === 0;
 }
