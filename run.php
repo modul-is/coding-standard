@@ -16,11 +16,23 @@ if (
 $paths = [];
 $preset = null;
 $dryRun = true;
+$inlineCssFile = 'www/assets/css/core/project.css';
+$inlineClassPrefix = 'is-';
+
+// e-mails and PDF/print templates are never rendered by a browser, so no CSP applies to them
+// and an external stylesheet would not reach them - inline styles are correct there
+$inlineExclude = '*/Mail/*,*/Print/*';
 
 for ($i = 1; $i < $argc; $i++) {
 	$arg = $argv[$i];
 	if ($arg === '--preset' && isset($argv[$i + 1])) {
 		$preset = $argv[++$i];
+	} elseif ($arg === '--inline-css' && isset($argv[$i + 1])) {
+		$inlineCssFile = $argv[++$i];
+	} elseif ($arg === '--inline-class-prefix' && isset($argv[$i + 1])) {
+		$inlineClassPrefix = $argv[++$i];
+	} elseif ($arg === '--inline-exclude' && isset($argv[$i + 1])) {
+		$inlineExclude = $argv[++$i];
 	} elseif ($arg === '--fix' || $arg === 'fix') {
 		$dryRun = false;
 	} elseif ($arg === 'check') {
@@ -30,6 +42,9 @@ for ($i = 1; $i < $argc; $i++) {
 		echo "  check (default): Run tools in dry-run mode.\n";
 		echo "  fix: Run tools and apply fixes.\n";
 		echo "  --preset <name>: Specify preset (e.g., php81). Autodetected if omitted.\n";
+		echo "  --inline-css <path>: Stylesheet the extracted inline styles are appended to. Default: www/assets/css/core/project.css\n";
+		echo "  --inline-class-prefix <prefix>: Prefix of the generated CSS classes. Default: is-\n";
+		echo "  --inline-exclude <globs>: Comma separated templates left untouched. Default: */Mail/*,*/Print/*\n";
 		echo "  path1 path2 ...: Specific files or directories to process. Defaults to src/, tests/ or ./\n";
 		exit(0);
 	} elseif (!str_starts_with($arg, '-')) {
@@ -91,7 +106,7 @@ $checker->cleanup();
 
 fixSpaces($argv);
 
-$inlineStylesOk = checkInlineStyles($argv);
+$inlineStylesOk = checkInlineStyles($paths, $root, !$dryRun, $inlineCssFile, $inlineClassPrefix, $inlineExclude);
 
 if ($fixerOk && $snifferOk && $inlineStylesOk) {
 	echo $dryRun ? "Code style checks passed.\n" : "Code style fixed successfully.\n";
@@ -150,57 +165,316 @@ function fixSpaces(array $arguments)
 
 
 // Inline styles checker/fixer (Latte, Twig)
-// Finds inline "style" HTML attributes and reports them as an error.
-// With --fix the inline style attributes are removed.
-// The <style nonce="..."> element is allowed and left untouched.
-function checkInlineStyles(array $arguments): bool
+// A style="..." attribute cannot be whitelisted by a CSP nonce (a nonce only works on the
+// <style> element), so the declarations are moved into a generated stylesheet and the element
+// gets a hash based CSS class instead. The <style nonce="..."> element is left untouched.
+// Styles containing a Latte/Twig expression cannot be turned into a static rule and are reported
+// for a manual fix instead of being thrown away.
+function checkInlineStyles(array $paths, string $root, bool $fix, string $cssFile, string $classPrefix, string $exclude = ''): bool
 {
-	$files = '';
-	$count = 0;
-	$fix = in_array('--fix', $arguments, true);
+	// a whole HTML tag: quoted attribute values and Latte/Twig braces may contain ">"
+	$tagPattern = '~<[a-zA-Z][a-zA-Z0-9:_.-]*(?:"[^"]*"|\'[^\']*\'|\{[^{}]*\}|[^>"\'])*/?>~';
 
-	// matches a style="..." or style='...' HTML attribute (not the <style> element)
-	$pattern = '~\s+style\s*=\s*("[^"]*"|\'[^\']*\')~i';
+	// a style="..." or style='...' attribute (not the <style> element - it has no whitespace before "style")
+	$stylePattern = '~\s+style\s*=\s*("[^"]*"|\'[^\']*\')~i';
 
-	$finder = new \Symfony\Component\Finder\Finder;
-	$finder->files()->name(['*.latte', '*.twig'])->in($arguments[2]);
+	$rules = [];
+	$extracted = [];
+	$manual = [];
 
-	foreach($finder as $file)
+	foreach(findTemplates($paths, $exclude) as $path)
 	{
-		$path = $file->getRealPath();
+		$original = file_get_contents($path);
 
-		$content = file_get_contents($path);
-
-		if(preg_match($pattern, $content))
+		$content = preg_replace_callback($tagPattern, function(array $match) use ($stylePattern, $classPrefix, $path, &$rules, &$extracted, &$manual): string
 		{
-			if($fix)
-			{
-				$content = preg_replace($pattern, '', $content);
+			$tag = $match[0];
 
-				file_put_contents($path, $content);
+			if(!preg_match($stylePattern, $tag, $attribute))
+			{
+				return $tag;
 			}
 
-			$files .= $path . PHP_EOL;
-			$count++;
+			$value = trim(substr($attribute[1], 1, -1));
+			$declarations = parseInlineStyle($value);
+
+			if($declarations === null)
+			{
+				$manual[$path][] = $value;
+
+				return $tag;
+			}
+
+			$tag = preg_replace($stylePattern, '', $tag, 1);
+
+			if($declarations !== [])
+			{
+				$class = $classPrefix . substr(md5(implode('; ', $declarations)), 0, 6);
+				$rules[$class] = $declarations;
+				$tag = addClassToTag($tag, $class);
+			}
+
+			$extracted[$path] = ($extracted[$path] ?? 0) + 1;
+
+			return $tag;
+		}, $original);
+
+		if($fix && $content !== $original)
+		{
+			file_put_contents($path, $content);
 		}
 	}
 
-	if($count != 0)
+	if(!$extracted && !$manual)
 	{
-		print PHP_EOL;
+		return true;
+	}
+
+	$cssPath = preg_match('~^([a-zA-Z]:[\\\\/]|/)~', $cssFile) ? $cssFile : $root . '/' . $cssFile;
+
+	print PHP_EOL;
+
+	if($extracted)
+	{
+		print $fix ? 'Inline styles extracted into ' . $cssPath . ':' . PHP_EOL : 'Inline styles found in files:' . PHP_EOL;
+
+		foreach($extracted as $path => $count)
+		{
+			print "\t" . $path . ' (' . $count . ')' . PHP_EOL;
+		}
 
 		if($fix)
 		{
-			print "Inline styles removed from files:" . PHP_EOL;
-		}
-		else
-		{
-			print "Inline styles found in files:" . PHP_EOL;
+			writeInlineStyleSheet($cssPath, $rules);
+
+			print PHP_EOL . 'Make sure the stylesheet is linked in the layout.' . PHP_EOL;
 		}
 
-		print $files . PHP_EOL;
+		print PHP_EOL;
 	}
 
-	// in fix mode the styles were removed, so the result is OK
-	return $fix || $count === 0;
+	if($manual)
+	{
+		print 'Inline styles with a dynamic value - fix these manually:' . PHP_EOL;
+
+		foreach($manual as $path => $values)
+		{
+			print "\t" . $path . PHP_EOL;
+
+			foreach(array_unique($values) as $value)
+			{
+				print "\t\tstyle=\"" . $value . '"' . PHP_EOL;
+			}
+		}
+
+		print PHP_EOL;
+	}
+
+	return $fix && !$manual;
+}
+
+
+// Returns the .latte and .twig files in the given paths, without the excluded ones
+function findTemplates(array $paths, string $exclude = ''): array
+{
+	$directories = [];
+	$files = [];
+
+	foreach($paths as $path)
+	{
+		if(is_dir($path))
+		{
+			$directories[] = $path;
+		}
+		elseif(is_file($path) && preg_match('~\.(latte|twig)$~i', $path))
+		{
+			$files[] = (string) realpath($path);
+		}
+	}
+
+	if($directories)
+	{
+		$finder = new \Symfony\Component\Finder\Finder;
+		$finder->files()->name(['*.latte', '*.twig'])->in($directories);
+
+		foreach($finder as $file)
+		{
+			$files[] = $file->getRealPath();
+		}
+	}
+
+	$patterns = [];
+
+	foreach(array_filter(array_map('trim', explode(',', $exclude))) as $glob)
+	{
+		$patterns[] = '~^' . str_replace(['\*', '\?'], ['.*', '.'], preg_quote($glob, '~')) . '$~i';
+	}
+
+	return array_filter(array_unique($files), function(string $file) use ($patterns): bool
+	{
+		$file = str_replace('\\', '/', $file);
+
+		foreach($patterns as $pattern)
+		{
+			if(preg_match($pattern, $file))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	});
+}
+
+
+// Splits an inline style value into normalized declarations,
+// returns null when the value cannot be turned into a static CSS rule
+function parseInlineStyle(string $value): ?array
+{
+	// Latte/Twig/PHP expression
+	if(preg_match('~[{}]|<\?~', $value))
+	{
+		return null;
+	}
+
+	if(trim($value) === '')
+	{
+		return [];
+	}
+
+	$parts = [];
+	$buffer = '';
+	$depth = 0;
+	$quote = null;
+
+	foreach(str_split($value) as $char)
+	{
+		if($quote !== null)
+		{
+			$buffer .= $char;
+
+			if($char === $quote)
+			{
+				$quote = null;
+			}
+
+			continue;
+		}
+
+		if($char === '"' || $char === "'")
+		{
+			$quote = $char;
+		}
+		elseif($char === '(')
+		{
+			$depth++;
+		}
+		elseif($char === ')')
+		{
+			$depth--;
+		}
+		elseif($char === ';' && $depth === 0)
+		{
+			$parts[] = $buffer;
+			$buffer = '';
+
+			continue;
+		}
+
+		$buffer .= $char;
+	}
+
+	$parts[] = $buffer;
+
+	$declarations = [];
+
+	foreach($parts as $part)
+	{
+		$part = trim($part);
+
+		if($part === '')
+		{
+			continue;
+		}
+
+		if(!str_contains($part, ':'))
+		{
+			return null;
+		}
+
+		[$property, $declarationValue] = explode(':', $part, 2);
+
+		$property = strtolower(trim($property));
+		$declarationValue = trim(preg_replace('~\s+~', ' ', $declarationValue));
+
+		if($property === '' || $declarationValue === '')
+		{
+			return null;
+		}
+
+		$declarations[] = $property . ': ' . $declarationValue;
+	}
+
+	return $declarations;
+}
+
+
+// Adds a CSS class to an HTML tag, merging it into the existing class or n:class attribute
+function addClassToTag(string $tag, string $class): string
+{
+	if(preg_match('~\sclass\s*=\s*(["\'])(.*?)\1~i', $tag, $match, PREG_OFFSET_CAPTURE))
+	{
+		$value = $match[2][0];
+
+		return substr_replace($tag, ($value === '' ? '' : $value . ' ') . $class, $match[2][1], strlen($value));
+	}
+
+	// n:class takes a list of expressions, so the class has to be quoted
+	if(preg_match('~\sn:class\s*=\s*(["\'])(.*?)\1~i', $tag, $match, PREG_OFFSET_CAPTURE))
+	{
+		$value = $match[2][0];
+		$literal = $match[1][0] === '"' ? "'" . $class . "'" : '"' . $class . '"';
+
+		return substr_replace($tag, ($value === '' ? '' : rtrim($value) . ', ') . $literal, $match[2][1], strlen($value));
+	}
+
+	return preg_replace('~^<[a-zA-Z][a-zA-Z0-9:_.-]*~', '$0 class="' . $class . '"', $tag, 1);
+}
+
+
+// Appends the extracted rules to the project stylesheet, keeping its current content untouched
+function writeInlineStyleSheet(string $cssPath, array $rules): void
+{
+	$header = '/* Styles extracted from inline style attributes by modul-is/cs. */';
+	$content = is_file($cssPath) ? file_get_contents($cssPath) : '';
+	$appended = '';
+
+	foreach($rules as $class => $declarations)
+	{
+		if(preg_match('~(^|[\s,}])\.' . preg_quote($class, '~') . '\s*\{~', $content))
+		{
+			continue;
+		}
+
+		$appended .= PHP_EOL . '.' . $class . ' {' . PHP_EOL . "\t" . implode(';' . PHP_EOL . "\t", $declarations) . ';' . PHP_EOL . '}' . PHP_EOL;
+	}
+
+	if($appended === '')
+	{
+		return;
+	}
+
+	if(!str_contains($content, $header))
+	{
+		$appended = PHP_EOL . $header . PHP_EOL . $appended;
+	}
+
+	$directory = dirname($cssPath);
+
+	if(!is_dir($directory))
+	{
+		mkdir($directory, 0777, true);
+	}
+
+	file_put_contents($cssPath, $content === '' ? ltrim($appended, "\r\n") : rtrim($content, "\r\n") . PHP_EOL . $appended);
 }
