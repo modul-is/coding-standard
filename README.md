@@ -46,7 +46,19 @@ The rules are appended to the project stylesheet (`www/assets/css/core/project.c
 
 Styles containing a Latte or Twig expression (e.g. `style="width: {$width}%"`) cannot be turned into a static rule – those are listed for a manual fix and are never removed. The `<style nonce="...">` element is left untouched.
 
-E-mail and PDF/print templates are skipped by default: they are not rendered by a browser, so no CSP applies to them and an external stylesheet would never reach them – inline styles are the correct solution there.
+A style attribute wrapped in a condition inside the tag is fixed too – the class is placed into the same branch, so it stays conditional:
+
+```latte
+<a href="{$link}" {if $isDisabled}class="pe-none" style="opacity: 0.6"{/if}>
+```
+
+```latte
+<a href="{$link}" {if $isDisabled}class="pe-none is-f411fb"{/if}>
+```
+
+When the branch has no `class` or `n:class` to merge into, one is opened in it. That is only possible when the element has no other class attribute – otherwise the element would end up with two of them and the style is reported for a manual fix instead.
+
+E-mail and PDF/print templates are skipped by default: they are not rendered by a browser, so no CSP applies to them and an external stylesheet would never reach them – inline styles are the correct solution there. The default globs match a directory named `Mail` or `Print` at any depth (`FooModule/Mail/`, `FooModule/templates/Print/`), so a whole `MailModule`/`PrintModule` – which also holds regular browser rendered templates – is not skipped. The match is case insensitive.
 
 | Option | Default | Meaning |
 |---|---|---|
