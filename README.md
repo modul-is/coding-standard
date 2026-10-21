@@ -24,46 +24,48 @@ If no PHP version is specified, it will try to detect it automatically from the 
 
 #### Inline styles
 
-The checker also scans `.latte` and `.twig` templates for inline `style="..."` HTML attributes and reports them as an error. A `style` attribute cannot be allowed by a CSP nonce – a nonce only works on the `<style>` element – so with `--fix` the declarations are moved into a generated stylesheet and the element gets a hash based CSS class instead:
+The checker also scans `.latte` and `.twig` templates for inline `style="..."` HTML attributes and reports them as an error – a `style` attribute cannot be allowed by a CSP nonce, a nonce only works on the `<style>` element. The `<style nonce="...">` element is left untouched.
+
+No generic classes are generated. With `--fix` a style is replaced only when every declaration has an exact Bootstrap 5 or core utility class:
 
 ```latte
-<div class="box" style="margin-top:10px; display:none">
-```
-
-```latte
-<div class="box is-cc136c">
-```
-
-```css
-/* www/assets/css/core/project.css */
-.is-cc136c {
-	margin-top: 10px;
-	display: none;
-}
-```
-
-The rules are appended to the project stylesheet (`www/assets/css/core/project.css`), which is versioned and already bundled – its current content is never rewritten, only new rules are added below a `/* Styles extracted from inline style attributes by modul-is/cs. */` marker. Identical declarations always share one class and the class is merged into an existing `class` or `n:class` attribute.
-
-Styles containing a Latte or Twig expression (e.g. `style="width: {$width}%"`) cannot be turned into a static rule – those are listed for a manual fix and are never removed. The `<style nonce="...">` element is left untouched.
-
-A style attribute wrapped in a condition inside the tag is fixed too – the class is placed into the same branch, so it stays conditional:
-
-```latte
-<a href="{$link}" {if $isDisabled}class="pe-none" style="opacity: 0.6"{/if}>
+<div class="box" style="width: 100%; margin-top: 1rem">
+<a style="cursor: pointer" n:class="$active ? active">
 ```
 
 ```latte
-<a href="{$link}" {if $isDisabled}class="pe-none is-f411fb"{/if}>
+<div class="box w-100 mt-3">
+<a n:class="$active ? active, 'cursor-pointer'">
 ```
 
-When the branch has no `class` or `n:class` to merge into, one is opened in it. That is only possible when the element has no other class attribute – otherwise the element would end up with two of them and the style is reported for a manual fix instead.
+| Declaration | Class |
+|---|---|
+| `width`/`height`: `25%`, `50%`, `75%`, `100%`, `auto`, `100vw`/`100vh` | `w-*`, `h-*`, `vw-100`, `vh-100` |
+| `max-width`/`max-height: 100%`, `min-width: 100vw`/`min-height: 100vh` | `mw-100`, `mh-100`, `min-vw-100`, `min-vh-100` |
+| `margin*`, `padding*`, `gap`, `row-gap`, `column-gap`: `0`, `.25rem`, `.5rem`, `1rem`, `1.5rem`, `3rem` (or the same in `px`), `auto` for margin | `m-*`, `mt-*`, `ms-*`, `mx-*`, `p-*`, `gap-*`, … |
+| `text-align`, `white-space`, `text-transform`, `text-decoration`, `word-wrap: break-word` | `text-start`, `text-center`, `text-end`, `text-nowrap`, `text-uppercase`, `text-decoration-none`, `text-break`, … |
+| `font-weight`, `font-style`, `line-height` | `fw-*`, `fst-*`, `lh-*` |
+| `vertical-align`, `float`, `position`, `top`/`bottom`/`left`/`right`: `0`, `50%`, `100%` | `align-*`, `float-start`/`float-end`, `position-*`, `top-*`, `start-*`, … |
+| `overflow`, `visibility`, `opacity`, `pointer-events`, `user-select`, `object-fit` | `overflow-*`, `visible`/`invisible`, `opacity-*`, `pe-*`, `user-select-*`, `object-fit-*` |
+| `flex-direction`, `flex-wrap`, `justify-content`, `align-items` | `flex-row`, `flex-column`, `flex-wrap`, `justify-content-*`, `align-items-*` |
+| `cursor: pointer` | `cursor-pointer` (core) |
 
-E-mail and PDF/print templates are skipped by default: they are not rendered by a browser, so no CSP applies to them and an external stylesheet would never reach them – inline styles are the correct solution there. The default globs match a directory named `Mail` or `Print` at any depth (`FooModule/Mail/`, `FooModule/templates/Print/`), so a whole `MailModule`/`PrintModule` – which also holds regular browser rendered templates – is not skipped. The match is case insensitive.
+`display` is never replaced automatically – `d-*` classes are `!important`, so jQuery `.show()`/`.hide()` could not override them anymore. The class is merged into an existing `class` or `n:class` attribute; a style wrapped in a condition inside the tag gets its class in the same branch:
+
+```latte
+<a href="{$link}" {if $isDisabled}class="pe-none" style="text-align: center"{/if}>
+```
+
+```latte
+<a href="{$link}" {if $isDisabled}class="pe-none text-center"{/if}>
+```
+
+Everything else is listed for a manual fix with a hint – a value without an exact spacer (`margin-top: 20px`), `display: none` (use the `hidden` attribute and toggle it in JS by `.prop('hidden', …)`), a dynamic value (`style="width: {$width}%"`), a style whose element already has a competing utility class (`class="mt-2" style="margin-top: 0"`) or anything else – use a utility class or a named class of the element in the project stylesheet.
+
+E-mail and PDF/print templates are skipped by default: they are not rendered by a browser, so no CSP applies to them and a class from an external stylesheet would never reach them – inline styles are the correct solution there. The default globs match a directory named `Mail` or `Print` at any depth (`FooModule/Mail/`, `FooModule/templates/Print/`), so a whole `MailModule`/`PrintModule` – which also holds regular browser rendered templates – is not skipped. The match is case insensitive.
 
 | Option | Default | Meaning |
 |---|---|---|
-| `--inline-css <path>` | `www/assets/css/core/project.css` | Stylesheet the extracted styles are appended to (relative to the project root) |
-| `--inline-class-prefix <prefix>` | `is-` | Prefix of the generated CSS classes |
 | `--inline-exclude <globs>` | `*/Mail/*,*/Print/*` | Comma separated globs of templates that are left untouched |
 
 #### Check SQL settings
