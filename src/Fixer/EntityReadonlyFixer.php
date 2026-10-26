@@ -9,7 +9,6 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Preg;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 final class EntityReadonlyFixer extends AbstractFixer
@@ -64,14 +63,7 @@ public int $id;
 
 		$content = Preg::replace($pattern, '#[\ModulIS\Attribute\ReadonlyProperty]', $content);
 
-		$newTokens = Tokens::fromCode($content);
-
-		foreach($newTokens as $index => $token)
-		{
-			$newTokens[$index] = new Token($token->getContent());
-		}
-
-		$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+		$tokens->setCode($content);
 	}
 
 

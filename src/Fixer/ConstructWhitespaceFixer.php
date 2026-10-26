@@ -8,7 +8,6 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 final class ConstructWhitespaceFixer extends AbstractFixer
@@ -74,14 +73,7 @@ public function __construct(
 				$newContent = preg_replace($string, '$1$2' . PHP_EOL . '$1$4' . PHP_EOL . "$1\t$6" . PHP_EOL . '$1$7' . PHP_EOL . '$1$9', $content);
 			}
 
-			$newTokens = Tokens::fromCode($newContent);
-
-			foreach($newTokens as $index => $token)
-			{
-				$newTokens[$index] = new Token($token->getContent());
-			}
-
-			$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+			$tokens->setCode($newContent);
 		}
 	}
 
