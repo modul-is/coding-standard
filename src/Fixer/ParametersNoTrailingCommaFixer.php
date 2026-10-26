@@ -9,7 +9,6 @@ use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Preg;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 final class ParametersNoTrailingCommaFixer extends AbstractFixer
@@ -69,14 +68,7 @@ public function __construct
 			{
 				$newContent = preg_replace($string, $match[1] . $match[3], $content);
 
-				$newTokens = Tokens::fromCode($newContent);
-
-				foreach($newTokens as $index => $token)
-				{
-					$newTokens[$index] = new Token($token->getContent());
-				}
-
-				$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+				$tokens->setCode($newContent);
 			}
 		}
 	}

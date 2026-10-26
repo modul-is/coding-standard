@@ -8,7 +8,6 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 final class DumpFixer extends AbstractFixer
@@ -62,14 +61,7 @@ die;
 
 		$newContent = preg_replace($string, '', $content);
 
-		$newTokens = Tokens::fromCode($newContent);
-
-		foreach($newTokens as $index => $token)
-		{
-			$newTokens[$index] = new Token($token->getContent());
-		}
-
-		$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+		$tokens->setCode($newContent);
 	}
 
 

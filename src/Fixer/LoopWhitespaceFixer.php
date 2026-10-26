@@ -8,7 +8,6 @@ use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
-use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 final class LoopWhitespaceFixer extends AbstractFixer
@@ -85,14 +84,7 @@ if ($a)
 		// Remove space before parentheses
 		$newContent = preg_replace('/\b(if|elseif|for|foreach|while|switch)\s+\(/u', '$1(', $newContent);
 
-		$newTokens = Tokens::fromCode($newContent);
-
-		foreach($newTokens as $index => $token)
-		{
-			$newTokens[$index] = new Token($token->getContent());
-		}
-
-		$tokens->overrideRange(0, $tokens->count() - 1, $newTokens);
+		$tokens->setCode($newContent);
 	}
 
 
